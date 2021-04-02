@@ -4,7 +4,6 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URI;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,8 +13,6 @@ import java.util.Set;
 public class MiniBrowser {
     public static void main(String[] args){
         String url = "http://localhost:8080";
-        String contentString= getContentString(url);
-        System.out.println(contentString);
         String httpString= getHttpString(url);
         System.out.println(httpString);
     }
@@ -42,7 +39,6 @@ public class MiniBrowser {
         int pos = -1;
         for (int i = 0; i < response.length-doubleReturn.length; i++) {
             byte[] temp = Arrays.copyOfRange(response, i, i + doubleReturn.length);
-
             if(Arrays.equals(temp, doubleReturn)) {
                 pos = i;
                 break;
@@ -103,8 +99,8 @@ public class MiniBrowser {
             OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream());
             writer.write(httpRequestString.toString());
             writer.flush();
-            InputStream is = socket.getInputStream();
 
+            InputStream is = socket.getInputStream();
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             byte[] buffer = new byte[1024];
             while(true) {
@@ -121,5 +117,19 @@ public class MiniBrowser {
             result = e.toString().getBytes(StandardCharsets.UTF_8);
         }
         return result;
+    }
+
+    public static byte[] readBytes(InputStream is) throws IOException {
+        byte[] buffer = new byte[1024];
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        while(true) {
+            int length = is.read(buffer);
+            if(-1==length)
+                break;
+            baos.write(buffer, 0, length);
+            if(length!=1024)
+                break;
+        }
+        return baos.toByteArray();
     }
 }
