@@ -1,7 +1,11 @@
 package server;
 
 import cn.hutool.core.net.NetUtil;
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
+import server.util.Constant;
 import server.util.Request;
+import server.util.Response;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -24,17 +28,32 @@ public class Bootstrap {
                 Request request = new Request(socket);
                 System.out.println("浏览器的输入信息： \r\n" + request.getRequestString());
                 System.out.println("uri:" + request.getUri());
-                OutputStream os = socket.getOutputStream();
-                String response_head = "HTTP/1.1 200 OK\r\n" + "Content-Type: text/html\r\n\r\n";
-                String responseString = "Hello JavaServer";
-                responseString = response_head + responseString;
-                os.write(responseString.getBytes());
-                os.flush();
-                socket.close();
+
+                Response response = new Response();
+                String html = "Hello User";
+                response.getWriter().println(html);
+
+                handle200(socket, response);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    private static void handle200(Socket socket, Response response) throws IOException {
+        String contentType = response.getContentType();
+        String headText = Constant.response_head_202;
+        headText = StrUtil.format(headText, contentType);
+        byte[] head = headText.getBytes();
+
+        byte[] body = response.getBody();
+
+        byte[] responseBytes = new byte[head.length + body.length];
+        ArrayUtil.copy(head, 0, responseBytes, 0, head.length);
+        ArrayUtil.copy(body, 0, responseBytes, head.length, body.length);
+
+        OutputStream os = socket.getOutputStream();
+        os.write(responseBytes);
+        socket.close();
     }
 }
