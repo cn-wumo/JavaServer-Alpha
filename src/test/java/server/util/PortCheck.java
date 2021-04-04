@@ -1,10 +1,16 @@
 package server.util;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.StrUtil;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class PortCheck {
     private static final int port = 8080;
@@ -24,6 +30,32 @@ public class PortCheck {
     public void Test() {
         String html = getContentString("/");
         Assert.assertEquals(html,"Hello User");
+    }
+
+    @Test
+    public void Html() {
+        String html = getContentString("/a.html");
+        Assert.assertEquals(html,"Hello World from a.html");
+    }
+
+    @Test
+    public void TimeConsumeHtml() throws InterruptedException {
+        ThreadPoolExecutor threadPool = new ThreadPoolExecutor(
+                20, 20, 60, TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>(10));
+        TimeInterval timeInterval = DateUtil.timer();
+
+        for(int i = 0; i<10; i++){
+            threadPool.execute(new Runnable(){
+                public void run() {
+                    getContentString("/timeConsume.html");
+                }
+            });
+        }
+        threadPool.shutdown();
+        threadPool.awaitTermination(1, TimeUnit.MILLISECONDS);
+
+        Assert.assertTrue(timeInterval.intervalMs() < 1000);
     }
 
     private String getContentString(String uri) {
