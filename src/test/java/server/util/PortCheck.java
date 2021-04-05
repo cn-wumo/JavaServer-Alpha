@@ -42,20 +42,24 @@ public class PortCheck {
     public void TimeConsumeHtml() throws InterruptedException {
         ThreadPoolExecutor threadPool = new ThreadPoolExecutor(
                 20, 20, 60, TimeUnit.SECONDS,
-                new LinkedBlockingQueue<Runnable>(10));
+                new LinkedBlockingQueue<>(10));
         TimeInterval timeInterval = DateUtil.timer();
 
         for(int i = 0; i<10; i++){
-            threadPool.execute(new Runnable(){
-                public void run() {
-                    getContentString("/timeConsume.html");
-                }
-            });
+            threadPool.execute(() -> getContentString("/timeConsume.html"));
         }
         threadPool.shutdown();
         threadPool.awaitTermination(1, TimeUnit.MILLISECONDS);
 
         Assert.assertTrue(timeInterval.intervalMs() < 1000);
+    }
+
+    @Test
+    public void Index() {
+        String html = getContentString("/a/index.html");
+        Assert.assertEquals(html,"Hello JavaServer from index.html@a");
+        html = getContentString("/b/index.html");
+        Assert.assertEquals(html,"Hello JavaServer from index.html@b");
     }
 
     private String getContentString(String uri) {

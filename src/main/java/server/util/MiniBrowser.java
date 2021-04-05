@@ -122,8 +122,11 @@ public class MiniBrowser {
     public static byte[] readBytes(InputStream is) throws IOException {
         byte[] buffer = new byte[1024];
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        while(is.available()!=0) {
+        while(true) {
             int length = is.read(buffer);
+            if(length<=0){
+                break;
+            }
             baos.write(buffer, 0, length);
             if(length!=1024)
                 break;

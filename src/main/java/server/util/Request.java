@@ -1,6 +1,8 @@
 package server.util;
 
 import cn.hutool.core.util.StrUtil;
+import server.Bootstrap;
+import server.catalina.Context;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,12 +14,18 @@ public class Request {
     private String requestString;
     private String uri;
     private final Socket socket;
+    private Context context;
+
+
     public Request(Socket socket) throws IOException {
         this.socket = socket;
         parseHttpRequest();
         if(StrUtil.isEmpty(requestString))
             return;
         parseUri();
+        parseContext();
+        if(!"/".equals(context.getPath()))
+            this.uri = StrUtil.removePrefix(uri, context.getPath());
     }
 
     private void parseHttpRequest() throws IOException {
@@ -27,15 +35,24 @@ public class Request {
     }
 
     private void parseUri() {
-        String temp;
-
-        temp = StrUtil.subBetween(requestString, " ", " ");
+        String temp = StrUtil.subBetween(requestString, " ", " ");
         if (!StrUtil.contains(temp, '?')) {
-            uri = temp;
-            return;
+            this.uri = temp;
+        }else{
+            this.uri = StrUtil.subBefore(temp, '?', false);
         }
-        temp = StrUtil.subBefore(temp, '?', false);
-        uri = temp;
+    }
+
+    private void parseContext() {
+        String path = StrUtil.subBetween(uri, "/", "/");
+        if (null == path)
+            path = "/";
+        else
+            path = "/" + path;
+
+        this.context = Bootstrap.contextMap.get(path);
+        if (null == context)
+            this.context = Bootstrap.contextMap.get("/");
     }
 
     public String getUri() {
@@ -44,6 +61,10 @@ public class Request {
 
     public String getRequestString(){
         return requestString;
+    }
+
+    public Context getContext() {
+        return context;
     }
 
 }
