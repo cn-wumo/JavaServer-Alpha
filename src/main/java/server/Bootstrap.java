@@ -7,6 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.LogFactory;
 import cn.hutool.system.SystemUtil;
 import server.catalina.Context;
+import server.catalina.Host;
 import server.util.*;
 
 import java.io.File;
@@ -17,13 +18,11 @@ import java.net.Socket;
 import java.util.*;
 
 public class Bootstrap {
-    public static Map<String, Context> contextMap = new HashMap<>();
     @SuppressWarnings("InfiniteLoopStatement")
     public static void main(String[] args) {
         int port = 8080;
 //        logJVM();
-        scanContextsOnWebAppsFolder();
-        scanContextsInServerXML();
+        Host host = new Host();
         try(
                 ServerSocket serverSocket = new ServerSocket(port)
                 ){
@@ -31,7 +30,7 @@ public class Bootstrap {
                 Socket socket =  serverSocket.accept();
                 Runnable r = () -> {
                     try{
-                        Request request = new Request(socket);
+                        Request request = new Request(socket,host);
                         System.out.println("浏览器的输入信息： \r\n" + request.getRequestString());
                         System.out.println("uri:" + request.getUri());
 
@@ -101,33 +100,6 @@ public class Bootstrap {
         Set<String> keys = infos.keySet();
         for (String key : keys) {
             LogFactory.get().info(key+":\t" + infos.get(key));
-        }
-    }
-
-    private static void scanContextsOnWebAppsFolder() {
-        File[] folders = Constant.webappsFolder.listFiles();
-        for (File folder : folders) {
-            if (!folder.isDirectory())
-                continue;
-            loadContext(folder);
-        }
-    }
-
-    private static void loadContext(File folder) {
-        String path = folder.getName();
-        if ("ROOT".equals(path))
-            path = "/";
-        else
-            path = "/" + path;
-        String docBase = folder.getAbsolutePath();
-        Context context = new Context(path,docBase);
-        contextMap.put(context.getPath(), context);
-    }
-
-    private static void scanContextsInServerXML() {
-        List<Context> contexts = ServerXMLUtil.getContexts();
-        for (Context context : contexts) {
-            contextMap.put(context.getPath(), context);
         }
     }
 }
