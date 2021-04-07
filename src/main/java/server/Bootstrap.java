@@ -7,7 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.LogFactory;
 import cn.hutool.system.SystemUtil;
 import server.catalina.Context;
-import server.catalina.Host;
+import server.catalina.Engine;
 import server.util.*;
 
 import java.io.File;
@@ -22,7 +22,7 @@ public class Bootstrap {
     public static void main(String[] args) {
         int port = 8080;
 //        logJVM();
-        Host host = new Host();
+        Engine engine = new Engine();
         try(
                 ServerSocket serverSocket = new ServerSocket(port)
                 ){
@@ -30,7 +30,7 @@ public class Bootstrap {
                 Socket socket =  serverSocket.accept();
                 Runnable r = () -> {
                     try{
-                        Request request = new Request(socket,host);
+                        Request request = new Request(socket,engine);
                         System.out.println("浏览器的输入信息： \r\n" + request.getRequestString());
                         System.out.println("uri:" + request.getUri());
 

@@ -1,20 +1,20 @@
-04 06, 2021 13:14:08 下午 server.catalina.Context <init>
+04 07, 2021 15:41:27 下午 server.catalina.Context <init>
 INFO : Deploying web application directory H:\Users\49277\Documents\GitHub\JavaServer-Alpha\webapps\a
-04 06, 2021 13:14:08 下午 server.catalina.Context <init>
-INFO : Deployment of web application directory H:\Users\49277\Documents\GitHub\JavaServer-Alpha\webapps\a has finished in 371 ms
-04 06, 2021 13:14:08 下午 server.catalina.Context <init>
+04 07, 2021 15:41:27 下午 server.catalina.Context <init>
+INFO : Deployment of web application directory H:\Users\49277\Documents\GitHub\JavaServer-Alpha\webapps\a has finished in 201 ms
+04 07, 2021 15:41:27 下午 server.catalina.Context <init>
 INFO : Deploying web application directory H:\Users\49277\Documents\GitHub\JavaServer-Alpha\webapps\b
-04 06, 2021 13:14:08 下午 server.catalina.Context <init>
-INFO : Deployment of web application directory H:\Users\49277\Documents\GitHub\JavaServer-Alpha\webapps\b has finished in 1 ms
-04 06, 2021 13:14:08 下午 server.catalina.Context <init>
+04 07, 2021 15:41:27 下午 server.catalina.Context <init>
+INFO : Deployment of web application directory H:\Users\49277\Documents\GitHub\JavaServer-Alpha\webapps\b has finished in 0 ms
+04 07, 2021 15:41:27 下午 server.catalina.Context <init>
 INFO : Deploying web application directory H:\Users\49277\Documents\GitHub\JavaServer-Alpha\webapps\ROOT
-04 06, 2021 13:14:08 下午 server.catalina.Context <init>
-INFO : Deployment of web application directory H:\Users\49277\Documents\GitHub\JavaServer-Alpha\webapps\ROOT has finished in 0 ms
-04 06, 2021 13:14:08 下午 server.catalina.Context <init>
+04 07, 2021 15:41:27 下午 server.catalina.Context <init>
+INFO : Deployment of web application directory H:\Users\49277\Documents\GitHub\JavaServer-Alpha\webapps\ROOT has finished in 1 ms
+04 07, 2021 15:41:27 下午 server.catalina.Context <init>
 INFO : Deploying web application directory webapps/b
-04 06, 2021 13:14:08 下午 server.catalina.Context <init>
-INFO : Deployment of web application directory webapps/b has finished in 1 ms
-04 06, 2021 13:14:24 下午 server.Bootstrap lambda$main$0
+04 07, 2021 15:41:27 下午 server.catalina.Context <init>
+INFO : Deployment of web application directory webapps/b has finished in 0 ms
+04 07, 2021 15:41:36 下午 server.Bootstrap lambda$main$0
 ERROR: Connection reset by peer
 java.net.SocketException: Connection reset by peer
 	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:420)
@@ -27,7 +27,7 @@ java.net.SocketException: Connection reset by peer
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
 	at java.base/java.lang.Thread.run(Thread.java:832)
-04 06, 2021 13:14:24 下午 server.Bootstrap lambda$main$0
+04 07, 2021 15:41:36 下午 server.Bootstrap lambda$main$0
 ERROR: Connection reset by peer
 java.net.SocketException: Connection reset by peer
 	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:420)
@@ -40,7 +40,7 @@ java.net.SocketException: Connection reset by peer
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
 	at java.base/java.lang.Thread.run(Thread.java:832)
-04 06, 2021 13:14:24 下午 server.Bootstrap lambda$main$0
+04 07, 2021 15:41:36 下午 server.Bootstrap lambda$main$0
 ERROR: Connection reset by peer
 java.net.SocketException: Connection reset by peer
 	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:420)
@@ -53,7 +53,7 @@ java.net.SocketException: Connection reset by peer
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
 	at java.base/java.lang.Thread.run(Thread.java:832)
-04 06, 2021 13:14:24 下午 server.Bootstrap lambda$main$0
+04 07, 2021 15:41:36 下午 server.Bootstrap lambda$main$0
 ERROR: Connection reset by peer
 java.net.SocketException: Connection reset by peer
 	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:420)
@@ -66,7 +66,7 @@ java.net.SocketException: Connection reset by peer
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
 	at java.base/java.lang.Thread.run(Thread.java:832)
-04 06, 2021 13:14:24 下午 server.Bootstrap lambda$main$0
+04 07, 2021 15:41:36 下午 server.Bootstrap lambda$main$0
 ERROR: Connection reset by peer
 java.net.SocketException: Connection reset by peer
 	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:420)
@@ -79,7 +79,7 @@ java.net.SocketException: Connection reset by peer
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
 	at java.base/java.lang.Thread.run(Thread.java:832)
-04 06, 2021 13:14:24 下午 server.Bootstrap lambda$main$0
+04 07, 2021 15:41:36 下午 server.Bootstrap lambda$main$0
 ERROR: Connection reset by peer
 java.net.SocketException: Connection reset by peer
 	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:420)
@@ -92,7 +92,7 @@ java.net.SocketException: Connection reset by peer
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
 	at java.base/java.lang.Thread.run(Thread.java:832)
-04 06, 2021 13:14:24 下午 server.Bootstrap lambda$main$0
+04 07, 2021 15:41:36 下午 server.Bootstrap lambda$main$0
 ERROR: Connection reset by peer
 java.net.SocketException: Connection reset by peer
 	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:420)
@@ -105,7 +105,7 @@ java.net.SocketException: Connection reset by peer
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
 	at java.base/java.lang.Thread.run(Thread.java:832)
-04 06, 2021 13:14:24 下午 server.Bootstrap lambda$main$0
+04 07, 2021 15:41:36 下午 server.Bootstrap lambda$main$0
 ERROR: Connection reset by peer
 java.net.SocketException: Connection reset by peer
 	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:420)
@@ -118,7 +118,7 @@ java.net.SocketException: Connection reset by peer
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
 	at java.base/java.lang.Thread.run(Thread.java:832)
-04 06, 2021 13:14:24 下午 server.Bootstrap lambda$main$0
+04 07, 2021 15:41:36 下午 server.Bootstrap lambda$main$0
 ERROR: Connection reset by peer
 java.net.SocketException: Connection reset by peer
 	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:420)
@@ -131,7 +131,7 @@ java.net.SocketException: Connection reset by peer
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
 	at java.base/java.lang.Thread.run(Thread.java:832)
-04 06, 2021 13:14:24 下午 server.Bootstrap lambda$main$0
+04 07, 2021 15:41:36 下午 server.Bootstrap lambda$main$0
 ERROR: Connection reset by peer
 java.net.SocketException: Connection reset by peer
 	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:420)
@@ -144,88 +144,82 @@ java.net.SocketException: Connection reset by peer
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
 	at java.base/java.lang.Thread.run(Thread.java:832)
-04 06, 2021 13:20:32 下午 server.catalina.Context <init>
-INFO : Deploying web application directory H:\Users\49277\Documents\GitHub\JavaServer-Alpha\webapps\a
-04 06, 2021 13:20:32 下午 server.catalina.Context <init>
-INFO : Deployment of web application directory H:\Users\49277\Documents\GitHub\JavaServer-Alpha\webapps\a has finished in 118 ms
-04 06, 2021 13:20:32 下午 server.catalina.Context <init>
-INFO : Deploying web application directory H:\Users\49277\Documents\GitHub\JavaServer-Alpha\webapps\b
-04 06, 2021 13:20:32 下午 server.catalina.Context <init>
-INFO : Deployment of web application directory H:\Users\49277\Documents\GitHub\JavaServer-Alpha\webapps\b has finished in 2 ms
-04 06, 2021 13:20:32 下午 server.catalina.Context <init>
-INFO : Deploying web application directory H:\Users\49277\Documents\GitHub\JavaServer-Alpha\webapps\ROOT
-04 06, 2021 13:20:32 下午 server.catalina.Context <init>
-INFO : Deployment of web application directory H:\Users\49277\Documents\GitHub\JavaServer-Alpha\webapps\ROOT has finished in 0 ms
-04 06, 2021 13:20:32 下午 server.catalina.Context <init>
-INFO : Deploying web application directory webapps/b
-04 06, 2021 13:20:32 下午 server.catalina.Context <init>
-INFO : Deployment of web application directory webapps/b has finished in 1 ms
-04 06, 2021 13:20:36 下午 server.Bootstrap lambda$main$0
-ERROR: Connection reset by peer
-java.net.SocketException: Connection reset by peer
-	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:420)
-	at java.base/sun.nio.ch.NioSocketImpl.write(NioSocketImpl.java:440)
-	at java.base/sun.nio.ch.NioSocketImpl$2.write(NioSocketImpl.java:826)
-	at java.base/java.net.Socket$SocketOutputStream.write(Socket.java:1052)
-	at java.base/java.io.OutputStream.write(OutputStream.java:127)
-	at server.Bootstrap.handle200(Bootstrap.java:85)
-	at server.Bootstrap.lambda$main$0(Bootstrap.java:60)
+04 07, 2021 15:41:45 下午 server.Bootstrap lambda$main$0
+ERROR: Connection reset
+java.net.SocketException: Connection reset
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:323)
+	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:350)
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(NioSocketImpl.java:803)
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:982)
+	at java.base/java.io.InputStream.read(InputStream.java:218)
+	at server.util.MiniBrowser.readBytes(MiniBrowser.java:126)
+	at server.util.Request.parseHttpRequest(Request.java:37)
+	at server.util.Request.<init>(Request.java:26)
+	at server.Bootstrap.lambda$main$0(Bootstrap.java:34)
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
 	at java.base/java.lang.Thread.run(Thread.java:832)
-04 06, 2021 13:20:36 下午 server.Bootstrap lambda$main$0
-ERROR: Connection reset by peer
-java.net.SocketException: Connection reset by peer
-	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:420)
-	at java.base/sun.nio.ch.NioSocketImpl.write(NioSocketImpl.java:440)
-	at java.base/sun.nio.ch.NioSocketImpl$2.write(NioSocketImpl.java:826)
-	at java.base/java.net.Socket$SocketOutputStream.write(Socket.java:1052)
-	at java.base/java.io.OutputStream.write(OutputStream.java:127)
-	at server.Bootstrap.handle200(Bootstrap.java:85)
-	at server.Bootstrap.lambda$main$0(Bootstrap.java:60)
+04 07, 2021 15:41:45 下午 server.Bootstrap lambda$main$0
+ERROR: Connection reset
+java.net.SocketException: Connection reset
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:323)
+	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:350)
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(NioSocketImpl.java:803)
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:982)
+	at java.base/java.io.InputStream.read(InputStream.java:218)
+	at server.util.MiniBrowser.readBytes(MiniBrowser.java:126)
+	at server.util.Request.parseHttpRequest(Request.java:37)
+	at server.util.Request.<init>(Request.java:26)
+	at server.Bootstrap.lambda$main$0(Bootstrap.java:34)
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
 	at java.base/java.lang.Thread.run(Thread.java:832)
-04 06, 2021 13:20:36 下午 server.Bootstrap lambda$main$0
-ERROR: Connection reset by peer
-java.net.SocketException: Connection reset by peer
-	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:420)
-	at java.base/sun.nio.ch.NioSocketImpl.write(NioSocketImpl.java:440)
-	at java.base/sun.nio.ch.NioSocketImpl$2.write(NioSocketImpl.java:826)
-	at java.base/java.net.Socket$SocketOutputStream.write(Socket.java:1052)
-	at java.base/java.io.OutputStream.write(OutputStream.java:127)
-	at server.Bootstrap.handle200(Bootstrap.java:85)
-	at server.Bootstrap.lambda$main$0(Bootstrap.java:60)
+04 07, 2021 15:41:45 下午 server.Bootstrap lambda$main$0
+ERROR: Connection reset
+java.net.SocketException: Connection reset
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:323)
+	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:350)
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(NioSocketImpl.java:803)
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:982)
+	at java.base/java.io.InputStream.read(InputStream.java:218)
+	at server.util.MiniBrowser.readBytes(MiniBrowser.java:126)
+	at server.util.Request.parseHttpRequest(Request.java:37)
+	at server.util.Request.<init>(Request.java:26)
+	at server.Bootstrap.lambda$main$0(Bootstrap.java:34)
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
 	at java.base/java.lang.Thread.run(Thread.java:832)
-04 06, 2021 13:20:36 下午 server.Bootstrap lambda$main$0
-ERROR: Connection reset by peer
-java.net.SocketException: Connection reset by peer
-	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:420)
-	at java.base/sun.nio.ch.NioSocketImpl.write(NioSocketImpl.java:440)
-	at java.base/sun.nio.ch.NioSocketImpl$2.write(NioSocketImpl.java:826)
-	at java.base/java.net.Socket$SocketOutputStream.write(Socket.java:1052)
-	at java.base/java.io.OutputStream.write(OutputStream.java:127)
-	at server.Bootstrap.handle200(Bootstrap.java:85)
-	at server.Bootstrap.lambda$main$0(Bootstrap.java:60)
+04 07, 2021 15:41:45 下午 server.Bootstrap lambda$main$0
+ERROR: Connection reset
+java.net.SocketException: Connection reset
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:323)
+	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:350)
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(NioSocketImpl.java:803)
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:982)
+	at java.base/java.io.InputStream.read(InputStream.java:218)
+	at server.util.MiniBrowser.readBytes(MiniBrowser.java:126)
+	at server.util.Request.parseHttpRequest(Request.java:37)
+	at server.util.Request.<init>(Request.java:26)
+	at server.Bootstrap.lambda$main$0(Bootstrap.java:34)
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
 	at java.base/java.lang.Thread.run(Thread.java:832)
-04 06, 2021 13:20:36 下午 server.Bootstrap lambda$main$0
-ERROR: Connection reset by peer
-java.net.SocketException: Connection reset by peer
-	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:420)
-	at java.base/sun.nio.ch.NioSocketImpl.write(NioSocketImpl.java:440)
-	at java.base/sun.nio.ch.NioSocketImpl$2.write(NioSocketImpl.java:826)
-	at java.base/java.net.Socket$SocketOutputStream.write(Socket.java:1052)
-	at java.base/java.io.OutputStream.write(OutputStream.java:127)
-	at server.Bootstrap.handle200(Bootstrap.java:85)
-	at server.Bootstrap.lambda$main$0(Bootstrap.java:60)
+04 07, 2021 15:41:45 下午 server.Bootstrap lambda$main$0
+ERROR: Connection reset
+java.net.SocketException: Connection reset
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:323)
+	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:350)
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(NioSocketImpl.java:803)
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:982)
+	at java.base/java.io.InputStream.read(InputStream.java:218)
+	at server.util.MiniBrowser.readBytes(MiniBrowser.java:126)
+	at server.util.Request.parseHttpRequest(Request.java:37)
+	at server.util.Request.<init>(Request.java:26)
+	at server.Bootstrap.lambda$main$0(Bootstrap.java:34)
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
 	at java.base/java.lang.Thread.run(Thread.java:832)
-04 06, 2021 13:20:36 下午 server.Bootstrap lambda$main$0
+04 07, 2021 15:41:45 下午 server.Bootstrap lambda$main$0
 ERROR: Connection reset by peer
 java.net.SocketException: Connection reset by peer
 	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:420)
@@ -233,12 +227,12 @@ java.net.SocketException: Connection reset by peer
 	at java.base/sun.nio.ch.NioSocketImpl$2.write(NioSocketImpl.java:826)
 	at java.base/java.net.Socket$SocketOutputStream.write(Socket.java:1052)
 	at java.base/java.io.OutputStream.write(OutputStream.java:127)
-	at server.Bootstrap.handle200(Bootstrap.java:85)
-	at server.Bootstrap.lambda$main$0(Bootstrap.java:60)
+	at server.Bootstrap.handle200(Bootstrap.java:86)
+	at server.Bootstrap.lambda$main$0(Bootstrap.java:61)
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
 	at java.base/java.lang.Thread.run(Thread.java:832)
-04 06, 2021 13:20:36 下午 server.Bootstrap lambda$main$0
+04 07, 2021 15:41:45 下午 server.Bootstrap lambda$main$0
 ERROR: Connection reset by peer
 java.net.SocketException: Connection reset by peer
 	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:420)
@@ -246,12 +240,12 @@ java.net.SocketException: Connection reset by peer
 	at java.base/sun.nio.ch.NioSocketImpl$2.write(NioSocketImpl.java:826)
 	at java.base/java.net.Socket$SocketOutputStream.write(Socket.java:1052)
 	at java.base/java.io.OutputStream.write(OutputStream.java:127)
-	at server.Bootstrap.handle200(Bootstrap.java:85)
-	at server.Bootstrap.lambda$main$0(Bootstrap.java:60)
+	at server.Bootstrap.handle200(Bootstrap.java:86)
+	at server.Bootstrap.lambda$main$0(Bootstrap.java:61)
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
 	at java.base/java.lang.Thread.run(Thread.java:832)
-04 06, 2021 13:20:36 下午 server.Bootstrap lambda$main$0
+04 07, 2021 15:41:45 下午 server.Bootstrap lambda$main$0
 ERROR: Connection reset by peer
 java.net.SocketException: Connection reset by peer
 	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:420)
@@ -259,34 +253,8 @@ java.net.SocketException: Connection reset by peer
 	at java.base/sun.nio.ch.NioSocketImpl$2.write(NioSocketImpl.java:826)
 	at java.base/java.net.Socket$SocketOutputStream.write(Socket.java:1052)
 	at java.base/java.io.OutputStream.write(OutputStream.java:127)
-	at server.Bootstrap.handle200(Bootstrap.java:85)
-	at server.Bootstrap.lambda$main$0(Bootstrap.java:60)
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
-	at java.base/java.lang.Thread.run(Thread.java:832)
-04 06, 2021 13:20:36 下午 server.Bootstrap lambda$main$0
-ERROR: Connection reset by peer
-java.net.SocketException: Connection reset by peer
-	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:420)
-	at java.base/sun.nio.ch.NioSocketImpl.write(NioSocketImpl.java:440)
-	at java.base/sun.nio.ch.NioSocketImpl$2.write(NioSocketImpl.java:826)
-	at java.base/java.net.Socket$SocketOutputStream.write(Socket.java:1052)
-	at java.base/java.io.OutputStream.write(OutputStream.java:127)
-	at server.Bootstrap.handle200(Bootstrap.java:85)
-	at server.Bootstrap.lambda$main$0(Bootstrap.java:60)
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
-	at java.base/java.lang.Thread.run(Thread.java:832)
-04 06, 2021 13:20:36 下午 server.Bootstrap lambda$main$0
-ERROR: Connection reset by peer
-java.net.SocketException: Connection reset by peer
-	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:420)
-	at java.base/sun.nio.ch.NioSocketImpl.write(NioSocketImpl.java:440)
-	at java.base/sun.nio.ch.NioSocketImpl$2.write(NioSocketImpl.java:826)
-	at java.base/java.net.Socket$SocketOutputStream.write(Socket.java:1052)
-	at java.base/java.io.OutputStream.write(OutputStream.java:127)
-	at server.Bootstrap.handle200(Bootstrap.java:85)
-	at server.Bootstrap.lambda$main$0(Bootstrap.java:60)
+	at server.Bootstrap.handle200(Bootstrap.java:86)
+	at server.Bootstrap.lambda$main$0(Bootstrap.java:61)
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
 	at java.base/java.lang.Thread.run(Thread.java:832)
