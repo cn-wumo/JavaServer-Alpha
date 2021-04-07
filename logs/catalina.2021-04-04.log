@@ -1,0 +1,45 @@
+04 04, 2021 16:53:58 下午 server.Bootstrap$1 run
+ERROR: Connection reset
+java.net.SocketException: Connection reset
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:323)
+	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:350)
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(NioSocketImpl.java:803)
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:982)
+	at java.base/java.io.InputStream.read(InputStream.java:218)
+	at server.util.MiniBrowser.readBytes(MiniBrowser.java:126)
+	at server.util.Request.parseHttpRequest(Request.java:25)
+	at server.util.Request.<init>(Request.java:17)
+	at server.Bootstrap$1.run(Bootstrap.java:36)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
+	at java.base/java.lang.Thread.run(Thread.java:832)
+04 04, 2021 16:53:58 下午 server.Bootstrap$1 run
+ERROR: Connection reset
+java.net.SocketException: Connection reset
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:323)
+	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:350)
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(NioSocketImpl.java:803)
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:982)
+	at java.base/java.io.InputStream.read(InputStream.java:218)
+	at server.util.MiniBrowser.readBytes(MiniBrowser.java:126)
+	at server.util.Request.parseHttpRequest(Request.java:25)
+	at server.util.Request.<init>(Request.java:17)
+	at server.Bootstrap$1.run(Bootstrap.java:36)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
+	at java.base/java.lang.Thread.run(Thread.java:832)
+04 04, 2021 16:53:58 下午 server.Bootstrap$1 run
+ERROR: Connection reset
+java.net.SocketException: Connection reset
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:323)
+	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:350)
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(NioSocketImpl.java:803)
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:982)
+	at java.base/java.io.InputStream.read(InputStream.java:218)
+	at server.util.MiniBrowser.readBytes(MiniBrowser.java:126)
+	at server.util.Request.parseHttpRequest(Request.java:25)
+	at server.util.Request.<init>(Request.java:17)
+	at server.Bootstrap$1.run(Bootstrap.java:36)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
+	at java.base/java.lang.Thread.run(Thread.java:832)

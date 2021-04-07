@@ -7,10 +7,12 @@ import java.util.List;
 public class Engine {
     private final String defaultHost;
     private final List<Host> hostList;
+    private Service service;
 
-    public Engine(){
+    public Engine(Service service){
         this.defaultHost = ServerXMLUtil.getEngineDefaultHost();
         this.hostList = ServerXMLUtil.getHosts(this);
+        this.service = service;
         checkDefault();
     }
 

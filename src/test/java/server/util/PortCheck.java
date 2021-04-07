@@ -34,8 +34,8 @@ public class PortCheck {
 
     @Test
     public void Html() {
-        String html = getContentString("/a.html");
-        Assert.assertEquals(html,"Hello World from a.html");
+        String html = getContentString("/");
+        Assert.assertEquals(html,"Hello JavaServer-Alpha@ROOT");
     }
 
     @Test
@@ -45,7 +45,7 @@ public class PortCheck {
                 new LinkedBlockingQueue<>(10));
         TimeInterval timeInterval = DateUtil.timer();
 
-        for(int i = 0; i<10; i++){
+        for(int i = 0; i<3; i++){
             threadPool.execute(() -> getContentString("/timeConsume.html"));
         }
         threadPool.shutdown();
@@ -62,8 +62,25 @@ public class PortCheck {
         Assert.assertEquals(html,"Hello JavaServer from index.html@b");
     }
 
+    @Test
+    public void test404() {
+        String response  = getHttpString("/not_exist.html");
+        Assert.assertTrue(StrUtil.containsAny(response, "HTTP/1.1 404 Not Found"));
+    }
+
+    @Test
+    public void test500() {
+        String response  = getHttpString("/500.html");
+        Assert.assertTrue(StrUtil.containsAny(response, "HTTP/1.1 500 Internal Server Error"));
+    }
+
     private String getContentString(String uri) {
         String url = StrUtil.format("http://{}:{}{}", ip,port,uri);
         return MiniBrowser.getContentString(url);
+    }
+
+    private String getHttpString(String uri) {
+        String url = StrUtil.format("http://{}:{}{}", ip,port,uri);
+        return MiniBrowser.getHttpString(url);
     }
 }

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<web>
-    <Engine defaultHost="localhost">
-        <Host name = "localhost">
-            <Context path="/b" docBase="webapps/b" />
-        </Host>
-    </Engine>
-</web>

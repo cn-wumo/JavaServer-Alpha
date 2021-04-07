@@ -3,7 +3,7 @@ package server.util;
 import cn.hutool.core.util.StrUtil;
 import server.catalina.Context;
 import server.catalina.Engine;
-import server.catalina.Host;
+import server.catalina.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,20 +16,22 @@ public class Request {
     private String uri;
     private final Socket socket;
     private Context context;
-    private Engine engine;
+    private final Service service;
 
 
-    public Request(Socket socket,Engine engine) throws IOException {
+    public Request(Socket socket,Service service) throws IOException {
         this.socket = socket;
-
-        this.engine = engine;
+        this.service = service;
         parseHttpRequest();
         if(StrUtil.isEmpty(requestString))
             return;
         parseUri();
         parseContext();
-        if(!"/".equals(context.getPath()))
+        if(!"/".equals(context.getPath())) {
             this.uri = StrUtil.removePrefix(uri, context.getPath());
+            if (StrUtil.isEmpty(uri))
+                this.uri = "/";
+        }
     }
 
     private void parseHttpRequest() throws IOException {
@@ -49,6 +51,10 @@ public class Request {
 
     private void parseContext() {
         String path = StrUtil.subBetween(uri, "/", "/");
+        Engine engine = service.getEngine();
+        context = engine.getDefaultHost().getContext(uri);
+        if(null!=context)
+            return;
         if (null == path)
             path = "/";
         else

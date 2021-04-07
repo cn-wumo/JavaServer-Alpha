@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Server>
+    <Service name="Catalina">
+        <Engine defaultHost="localhost">
+            <Host name = "localhost">
+                <Context path="/b" docBase="webapps/b" />
+            </Host>
+        </Engine>
+    </Service>
+</Server>
