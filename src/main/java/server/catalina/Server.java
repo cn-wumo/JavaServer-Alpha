@@ -1,5 +1,7 @@
 package server.catalina;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.ArrayUtil;
@@ -26,55 +28,14 @@ public class Server {
     }
 
     public void start(){
+        TimeInterval timeInterval = DateUtil.timer();
         logJVM();
         init();
+        LogFactory.get().info("Server startup in {} ms",timeInterval.intervalMs());
     }
-    @SuppressWarnings("InfiniteLoopStatement")
-    private void init() {
-        int port = 8080;
-        try(
-                ServerSocket serverSocket = new ServerSocket(port)
-        ){
-            while(true) {
-                Socket socket =  serverSocket.accept();
-                Runnable r = () -> {
-                    try{
-                        Request request = new Request(socket,service);
-                        System.out.println("浏览器的输入信息： \r\n" + request.getRequestString());
-                        System.out.println("uri:" + request.getUri());
 
-                        Response response = new Response();
-                        String uri = request.getUri();
-                        Context context = request.getContext();
-                        if(null==uri)
-                            return;
-                        if("/500.html".equals(uri)){
-                            throw new Exception("this is a deliberately created exception");
-                        }
-                        if("/".equals(uri))
-                            uri = WebXMLUtil.getWelcomeFile(request.getContext());
-                        String fileName = StrUtil.removePrefix(uri, "/");
-                        File file = FileUtil.file(context.getDocBase(),fileName);
-                        if(file.exists()){
-                            String fileContent = FileUtil.readUtf8String(file);
-                            response.getWriter().println(fileContent);
-                            if(fileName.equals("timeConsume.html")){
-                                ThreadUtil.safeSleep(1000);
-                            }
-                        }else{
-                            handle404(socket,uri);
-                        }
-                        handle200(socket, response);
-                    } catch (Exception e) {
-                        LogFactory.get().error(e);
-                        handle500(socket,e);
-                    }
-                };
-                ThreadPoolUtil.run(r);
-            }
-        } catch (IOException e) {
-            LogFactory.get().error(e);
-        }
+    private void init() {
+        service.start();
     }
 
     private static void logJVM() {

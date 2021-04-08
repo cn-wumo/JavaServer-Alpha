@@ -29,13 +29,22 @@ public class PortCheck {
     @Test
     public void Test() {
         String html = getContentString("/");
-        Assert.assertEquals(html,"Hello User");
+        Assert.assertEquals(html,"Hello JavaServer-Alpha@ROOT");
+    }
+
+    @Test
+    public void JPG() {
+        byte[] bytes = getContentBytes("/emoticon.jpg");
+        int pngFileLength = 64429;
+        Assert.assertEquals(pngFileLength, bytes.length);
     }
 
     @Test
     public void Html() {
-        String html = getContentString("/");
-        Assert.assertEquals(html,"Hello JavaServer-Alpha@ROOT");
+        String response = getHttpString("/a.txt");
+        Assert.assertTrue(StrUtil.containsAny(response, "Content-Type: text/plain"));
+        String html = getHttpString("/a.html");
+        Assert.assertTrue(StrUtil.containsAny(html, "Content-Type: text/html"));
     }
 
     @Test
@@ -72,6 +81,14 @@ public class PortCheck {
     public void test500() {
         String response  = getHttpString("/500.html");
         Assert.assertTrue(StrUtil.containsAny(response, "HTTP/1.1 500 Internal Server Error"));
+    }
+
+    private byte[] getContentBytes(String uri) {
+        return getContentBytes(uri,false);
+    }
+    private byte[] getContentBytes(String uri,boolean gzip) {
+        String url = StrUtil.format("http://{}:{}{}", ip,port,uri);
+        return MiniBrowser.getContentBytes(url,false);
     }
 
     private String getContentString(String uri) {

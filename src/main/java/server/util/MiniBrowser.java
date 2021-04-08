@@ -119,7 +119,7 @@ public class MiniBrowser {
         return result;
     }
 
-    public static byte[] readBytes(InputStream is) throws IOException {
+    public static byte[] readBytes(InputStream is,boolean fully) throws IOException {
         byte[] buffer = new byte[1024];
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         while(true) {
@@ -128,7 +128,7 @@ public class MiniBrowser {
                 break;
             }
             baos.write(buffer, 0, length);
-            if(length!=1024)
+            if(!fully && length!=1024)
                 break;
         }
         return baos.toByteArray();
