@@ -72,6 +72,12 @@ public class PortCheck {
     }
 
     @Test
+    public void Hello() {
+        String html = getContentString("/hello");
+        Assert.assertEquals(html,"Hello JavaServer-Alpha from HelloServlet");
+    }
+
+    @Test
     public void test404() {
         String response  = getHttpString("/not_exist.html");
         Assert.assertTrue(StrUtil.containsAny(response, "HTTP/1.1 404 Not Found"));

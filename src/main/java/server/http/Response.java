@@ -1,11 +1,11 @@
-package server.util;
+package server.http;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
-public class Response {
+public class Response extends BaseResponse {
     private final StringWriter stringWriter;
     private final PrintWriter writer;
     private String contentType;
@@ -15,6 +15,7 @@ public class Response {
         this.writer = new PrintWriter(stringWriter);
         this.contentType = "text/html";
     }
+
     public String getContentType() {
         return contentType;
     }
@@ -26,14 +27,15 @@ public class Response {
     public void setContentType(String contentType) {
         this.contentType = contentType;
     }
+
     public void setBody(byte[] body) {
         this.body = body;
     }
 
-    public byte[] getBody() throws UnsupportedEncodingException {
+    public byte[] getBody(){
         if(null==body) {
             String content = stringWriter.toString();
-            body = content.getBytes("utf-8");
+            body = content.getBytes(StandardCharsets.UTF_8);
         }
         return body;
     }

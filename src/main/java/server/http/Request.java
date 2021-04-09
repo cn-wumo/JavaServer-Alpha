@@ -1,16 +1,17 @@
-package server.util;
+package server.http;
 
 import cn.hutool.core.util.StrUtil;
 import server.catalina.Context;
 import server.catalina.Engine;
 import server.catalina.Service;
+import server.util.MiniBrowser;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
-public class Request {
+public class Request extends BaseRequest {
 
     private String requestString;
     private String uri;
