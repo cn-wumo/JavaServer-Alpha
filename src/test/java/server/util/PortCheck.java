@@ -89,6 +89,12 @@ public class PortCheck {
         Assert.assertTrue(StrUtil.containsAny(response, "HTTP/1.1 500 Internal Server Error"));
     }
 
+    @Test
+    public void JavaeeHello() {
+        String html = getContentString("/javaee/hello");
+        Assert.assertEquals(html,"Hello JavaServer-Alpha from HelloServlet@javaee");
+    }
+
     private byte[] getContentBytes(String uri) {
         return getContentBytes(uri,false);
     }

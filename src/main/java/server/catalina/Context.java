@@ -9,6 +9,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import server.classloader.WebappClassLoader;
 import server.exception.WebConfigDuplicatedException;
 import server.util.ContextXMLUtil;
 
@@ -23,6 +24,7 @@ public class Context {
     private Map<String, String> url_servletName;
     private Map<String, String> servletName_className;
     private Map<String, String> className_servletName;
+    private WebappClassLoader webappClassLoader;
 
     public Context(String path, String docBase) {
         TimeInterval timeInterval = DateUtil.timer();
@@ -33,6 +35,8 @@ public class Context {
         this.url_servletName = new HashMap<>();
         this.servletName_className = new HashMap<>();
         this.className_servletName = new HashMap<>();
+        ClassLoader commonClassLoader = Thread.currentThread().getContextClassLoader();
+        this.webappClassLoader = new WebappClassLoader(docBase, commonClassLoader);
         deploy();
         LogFactory.get().info("Deploying web application directory {}", this.docBase);
         LogFactory.get().info("Deployment of web application directory {} has finished in {} ms", this.docBase,timeInterval.intervalMs());
@@ -126,5 +130,9 @@ public class Context {
 
     public void setDocBase(String docBase) {
         this.docBase = docBase;
+    }
+
+    public WebappClassLoader getWebappClassLoader() {
+        return webappClassLoader;
     }
 }
