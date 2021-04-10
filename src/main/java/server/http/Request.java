@@ -18,16 +18,18 @@ public class Request extends BaseRequest {
     private final Socket socket;
     private Context context;
     private final Service service;
+    private String method;
 
 
     public Request(Socket socket,Service service) throws IOException {
         this.socket = socket;
         this.service = service;
-        parseHttpRequest();
+        this.parseHttpRequest();
         if(StrUtil.isEmpty(requestString))
             return;
-        parseUri();
-        parseContext();
+        this.parseUri();
+        this.parseContext();
+        this.parseMethod();
         if(!"/".equals(context.getPath())) {
             this.uri = StrUtil.removePrefix(uri, context.getPath());
             if (StrUtil.isEmpty(uri))
@@ -77,4 +79,11 @@ public class Request extends BaseRequest {
         return context;
     }
 
+    private void parseMethod() {
+        method = StrUtil.subBefore(requestString, " ", false);
+    }
+    @Override
+    public String getMethod() {
+        return method;
+    }
 }

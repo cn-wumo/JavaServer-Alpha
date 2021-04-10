@@ -49,4 +49,9 @@ public class Constant {
     public static final File serverXmlFile = new File(confFolder, "Server.xml");
     public static final File webXmlFile = new File(confFolder, "web.xml");
     public static final File contextXmlFile = new File(confFolder, "context.xml");
+
+    public static final int CODE_200 = 200;
+    public static final int CODE_302 = 302;
+    public static final int CODE_404 = 404;
+    public static final int CODE_500 = 500;
 }

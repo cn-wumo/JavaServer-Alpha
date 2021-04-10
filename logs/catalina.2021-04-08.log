@@ -1,0 +1,136 @@
+04 08, 2021 15:58:39 下午 server.catalina.Context <init>
+INFO : Deploying web application directory H:\Users\49277\Documents\GitHub\JavaServer-Alpha\webapps\ROOT
+04 08, 2021 15:58:39 下午 server.catalina.Context <init>
+INFO : Deployment of web application directory H:\Users\49277\Documents\GitHub\JavaServer-Alpha\webapps\ROOT has finished in 174 ms
+04 08, 2021 15:58:39 下午 server.catalina.Context <init>
+INFO : Deploying web application directory webapps/b
+04 08, 2021 15:58:39 下午 server.catalina.Context <init>
+INFO : Deployment of web application directory webapps/b has finished in 0 ms
+04 08, 2021 15:58:39 下午 server.catalina.Server logJVM
+INFO : Server version:		JavaServer-Alpha
+04 08, 2021 15:58:39 下午 server.catalina.Server logJVM
+INFO : Server built:		Thu Apr 08 15:58:39 CST 2021
+04 08, 2021 15:58:39 下午 server.catalina.Server logJVM
+INFO : Server number:		1.0.1
+04 08, 2021 15:58:39 下午 server.catalina.Server logJVM
+INFO : OS Name	:		Windows 10
+04 08, 2021 15:58:39 下午 server.catalina.Server logJVM
+INFO : OS Version:		10.0
+04 08, 2021 15:58:39 下午 server.catalina.Server logJVM
+INFO : Architecture:		amd64
+04 08, 2021 15:58:39 下午 server.catalina.Server logJVM
+INFO : Java Home:		D:\openJDK14
+04 08, 2021 15:58:39 下午 server.catalina.Server logJVM
+INFO : JVM Version:		14+36-1461
+04 08, 2021 15:58:39 下午 server.catalina.Server logJVM
+INFO : JVM Vendor:		Oracle Corporation
+04 08, 2021 16:13:28 下午 server.catalina.Context <init>
+INFO : Deploying web application directory H:\Users\49277\Documents\GitHub\JavaServer-Alpha\webapps\ROOT
+04 08, 2021 16:13:28 下午 server.catalina.Context <init>
+INFO : Deployment of web application directory H:\Users\49277\Documents\GitHub\JavaServer-Alpha\webapps\ROOT has finished in 151 ms
+04 08, 2021 16:13:28 下午 server.catalina.Context <init>
+INFO : Deploying web application directory webapps/b
+04 08, 2021 16:13:28 下午 server.catalina.Context <init>
+INFO : Deployment of web application directory webapps/b has finished in 1 ms
+04 08, 2021 16:13:28 下午 server.catalina.Server logJVM
+INFO : Server version:		JavaServer-Alpha
+04 08, 2021 16:13:28 下午 server.catalina.Server logJVM
+INFO : Server built:		Thu Apr 08 16:13:28 CST 2021
+04 08, 2021 16:13:28 下午 server.catalina.Server logJVM
+INFO : Server number:		1.0.1
+04 08, 2021 16:13:28 下午 server.catalina.Server logJVM
+INFO : OS Name	:		Windows 10
+04 08, 2021 16:13:28 下午 server.catalina.Server logJVM
+INFO : OS Version:		10.0
+04 08, 2021 16:13:28 下午 server.catalina.Server logJVM
+INFO : Architecture:		amd64
+04 08, 2021 16:13:28 下午 server.catalina.Server logJVM
+INFO : Java Home:		D:\openJDK14
+04 08, 2021 16:13:28 下午 server.catalina.Server logJVM
+INFO : JVM Version:		14+36-1461
+04 08, 2021 16:13:28 下午 server.catalina.Server logJVM
+INFO : JVM Vendor:		Oracle Corporation
+04 08, 2021 16:41:36 下午 server.catalina.Context <init>
+INFO : Deploying web application directory H:\Users\49277\Documents\GitHub\JavaServer-Alpha\webapps\ROOT
+04 08, 2021 16:41:36 下午 server.catalina.Context <init>
+INFO : Deployment of web application directory H:\Users\49277\Documents\GitHub\JavaServer-Alpha\webapps\ROOT has finished in 102 ms
+04 08, 2021 16:41:36 下午 server.catalina.Context <init>
+INFO : Deploying web application directory webapps/b
+04 08, 2021 16:41:36 下午 server.catalina.Context <init>
+INFO : Deployment of web application directory webapps/b has finished in 0 ms
+04 08, 2021 16:41:36 下午 server.catalina.Server logJVM
+INFO : Server version:		JavaServer-Alpha
+04 08, 2021 16:41:36 下午 server.catalina.Server logJVM
+INFO : Server built:		Thu Apr 08 16:41:36 CST 2021
+04 08, 2021 16:41:36 下午 server.catalina.Server logJVM
+INFO : Server number:		1.0.1
+04 08, 2021 16:41:36 下午 server.catalina.Server logJVM
+INFO : OS Name	:		Windows 10
+04 08, 2021 16:41:36 下午 server.catalina.Server logJVM
+INFO : OS Version:		10.0
+04 08, 2021 16:41:36 下午 server.catalina.Server logJVM
+INFO : Architecture:		amd64
+04 08, 2021 16:41:36 下午 server.catalina.Server logJVM
+INFO : Java Home:		D:\openJDK14
+04 08, 2021 16:41:36 下午 server.catalina.Server logJVM
+INFO : JVM Version:		14+36-1461
+04 08, 2021 16:41:36 下午 server.catalina.Server logJVM
+INFO : JVM Vendor:		Oracle Corporation
+04 08, 2021 16:41:36 下午 server.catalina.Connector init
+INFO : Initializing ProtocolHandler [http-bio-8080]
+04 08, 2021 16:41:36 下午 server.catalina.Connector init
+INFO : Initializing ProtocolHandler [http-bio-8081]
+04 08, 2021 16:41:36 下午 server.catalina.Connector init
+INFO : Initializing ProtocolHandler [http-bio-8082]
+04 08, 2021 16:41:36 下午 server.catalina.Service init
+INFO : Initialization processed in 1 ms
+04 08, 2021 16:41:36 下午 server.catalina.Connector start
+INFO : Starting ProtocolHandler [http-bio-8080]
+04 08, 2021 16:41:36 下午 server.catalina.Connector start
+INFO : Starting ProtocolHandler [http-bio-8081]
+04 08, 2021 16:41:36 下午 server.catalina.Connector start
+INFO : Starting ProtocolHandler [http-bio-8082]
+04 08, 2021 16:41:36 下午 server.catalina.Server start
+INFO : Server startup in 17 ms
+04 08, 2021 22:55:47 下午 server.catalina.Context <init>
+INFO : Deploying web application directory H:\Users\49277\Documents\GitHub\JavaServer-Alpha\webapps\ROOT
+04 08, 2021 22:55:47 下午 server.catalina.Context <init>
+INFO : Deployment of web application directory H:\Users\49277\Documents\GitHub\JavaServer-Alpha\webapps\ROOT has finished in 137 ms
+04 08, 2021 22:55:47 下午 server.catalina.Context <init>
+INFO : Deploying web application directory webapps/b
+04 08, 2021 22:55:47 下午 server.catalina.Context <init>
+INFO : Deployment of web application directory webapps/b has finished in 0 ms
+04 08, 2021 22:55:47 下午 server.catalina.Server logJVM
+INFO : Server version:		JavaServer-Alpha
+04 08, 2021 22:55:47 下午 server.catalina.Server logJVM
+INFO : Server built:		Thu Apr 08 22:55:47 CST 2021
+04 08, 2021 22:55:47 下午 server.catalina.Server logJVM
+INFO : Server number:		1.0.1
+04 08, 2021 22:55:47 下午 server.catalina.Server logJVM
+INFO : OS Name	:		Windows 10
+04 08, 2021 22:55:47 下午 server.catalina.Server logJVM
+INFO : OS Version:		10.0
+04 08, 2021 22:55:47 下午 server.catalina.Server logJVM
+INFO : Architecture:		amd64
+04 08, 2021 22:55:47 下午 server.catalina.Server logJVM
+INFO : Java Home:		D:\openJDK14
+04 08, 2021 22:55:47 下午 server.catalina.Server logJVM
+INFO : JVM Version:		14+36-1461
+04 08, 2021 22:55:47 下午 server.catalina.Server logJVM
+INFO : JVM Vendor:		Oracle Corporation
+04 08, 2021 22:55:47 下午 server.catalina.Connector init
+INFO : Initializing ProtocolHandler [http-bio-8080]
+04 08, 2021 22:55:47 下午 server.catalina.Connector init
+INFO : Initializing ProtocolHandler [http-bio-8081]
+04 08, 2021 22:55:47 下午 server.catalina.Connector init
+INFO : Initializing ProtocolHandler [http-bio-8082]
+04 08, 2021 22:55:47 下午 server.catalina.Service init
+INFO : Initialization processed in 2 ms
+04 08, 2021 22:55:47 下午 server.catalina.Connector start
+INFO : Starting ProtocolHandler [http-bio-8080]
+04 08, 2021 22:55:47 下午 server.catalina.Connector start
+INFO : Starting ProtocolHandler [http-bio-8081]
+04 08, 2021 22:55:47 下午 server.catalina.Connector start
+INFO : Starting ProtocolHandler [http-bio-8082]
+04 08, 2021 22:55:47 下午 server.catalina.Server start
+INFO : Server startup in 22 ms

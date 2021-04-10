@@ -10,6 +10,8 @@ public class Response extends BaseResponse {
     private final PrintWriter writer;
     private String contentType;
     private byte[] body;
+    private int status;
+
     public Response(){
         this.stringWriter = new StringWriter();
         this.writer = new PrintWriter(stringWriter);
@@ -38,6 +40,14 @@ public class Response extends BaseResponse {
             body = content.getBytes(StandardCharsets.UTF_8);
         }
         return body;
+    }
+
+    @Override
+    public void setStatus(int status) {
+        this.status = status;
+    }
+    public int getStatus() {
+        return status;
     }
 
 }
