@@ -12,6 +12,7 @@ import org.jsoup.select.Elements;
 import server.classloader.WebappClassLoader;
 import server.exception.WebConfigDuplicatedException;
 import server.util.ContextXMLUtil;
+import server.watcher.ContextFileChangeWatcher;
 
 import java.io.File;
 import java.util.*;
@@ -25,8 +26,11 @@ public class Context {
     private Map<String, String> servletName_className;
     private Map<String, String> className_servletName;
     private WebappClassLoader webappClassLoader;
+    private Host host;
+    private boolean reloadable;
+    private ContextFileChangeWatcher contextFileChangeWatcher;
 
-    public Context(String path, String docBase) {
+    public Context(String path, String docBase,Host host,boolean reloadable) {
         TimeInterval timeInterval = DateUtil.timer();
         this.path = path;
         this.docBase = docBase;
@@ -35,6 +39,9 @@ public class Context {
         this.url_servletName = new HashMap<>();
         this.servletName_className = new HashMap<>();
         this.className_servletName = new HashMap<>();
+        this.host = host;
+        this.reloadable = reloadable;
+
         ClassLoader commonClassLoader = Thread.currentThread().getContextClassLoader();
         this.webappClassLoader = new WebappClassLoader(docBase, commonClassLoader);
         deploy();
@@ -106,10 +113,20 @@ public class Context {
     }
 
     private void deploy() {
-        TimeInterval timeInterval = DateUtil.timer();
-        LogFactory.get().info("Deploying web application directory {}", this.docBase);
         init();
-        LogFactory.get().info("Deployment of web application directory {} has finished in {} ms",this.getDocBase(),timeInterval.intervalMs());
+        if(reloadable){
+            contextFileChangeWatcher = new ContextFileChangeWatcher(this);
+            contextFileChangeWatcher.start();
+        }
+    }
+
+    public void stop() {
+        webappClassLoader.stop();
+        contextFileChangeWatcher.stop();
+    }
+
+    public void reload() {
+        host.reload(this);
     }
 
     public String getServletClassName(String uri) {
@@ -134,5 +151,12 @@ public class Context {
 
     public WebappClassLoader getWebappClassLoader() {
         return webappClassLoader;
+    }
+
+    public boolean isReloadable() {
+        return reloadable;
+    }
+    public void setReloadable(boolean reloadable) {
+        this.reloadable = reloadable;
     }
 }
