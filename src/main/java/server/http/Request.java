@@ -6,6 +6,7 @@ import server.catalina.Engine;
 import server.catalina.Service;
 import server.util.MiniBrowser;
 
+import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
@@ -82,8 +83,17 @@ public class Request extends BaseRequest {
     private void parseMethod() {
         method = StrUtil.subBefore(requestString, " ", false);
     }
+
     @Override
     public String getMethod() {
         return method;
     }
+
+    public ServletContext getServletContext() {
+        return context.getServletContext();
+    }
+    public String getRealPath(String path) {
+        return getServletContext().getRealPath(path);
+    }
+
 }

@@ -40,14 +40,6 @@ public class PortCheck {
     }
 
     @Test
-    public void Html() {
-        String response = getHttpString("/a.txt");
-        Assert.assertTrue(StrUtil.containsAny(response, "Content-Type: text/plain"));
-        String html = getHttpString("/a.html");
-        Assert.assertTrue(StrUtil.containsAny(html, "Content-Type: text/html"));
-    }
-
-    @Test
     public void TimeConsumeHtml() throws InterruptedException {
         ThreadPoolExecutor threadPool = new ThreadPoolExecutor(
                 20, 20, 60, TimeUnit.SECONDS,
@@ -64,17 +56,10 @@ public class PortCheck {
     }
 
     @Test
-    public void Index() {
-        String html = getContentString("/a/index.html");
-        Assert.assertEquals(html,"Hello JavaServer from index.html@a");
-        html = getContentString("/b/index.html");
-        Assert.assertEquals(html,"Hello JavaServer from index.html@b");
-    }
-
-    @Test
     public void Hello() {
-        String html = getContentString("/hello");
-        Assert.assertEquals(html,"Hello JavaServer-Alpha from HelloServlet");
+        String html1 = getContentString("/javaee/hello");
+        String html2 = getContentString("/javaee/hello");
+        Assert.assertEquals(html1,html2);
     }
 
     @Test
