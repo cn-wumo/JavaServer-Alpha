@@ -8,6 +8,8 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -63,6 +65,26 @@ public class PortCheck {
     }
 
     @Test
+    public void GetParam() {
+        String uri = "/javaee/param";
+        String url = StrUtil.format("http://{}:{}{}", ip,port,uri);
+        Map<String,Object> params = new HashMap<>();
+        params.put("name","meepo");
+        String html = MiniBrowser.getContentString(url, params, true);
+        Assert.assertEquals(html,"get name:meepo");
+    }
+
+    @Test
+    public void PostParam() {
+        String uri = "/javaee/param";
+        String url = StrUtil.format("http://{}:{}{}", ip,port,uri);
+        Map<String,Object> params = new HashMap<>();
+        params.put("name","meepo");
+        String html = MiniBrowser.getContentString(url, params, false);
+        Assert.assertEquals(html,"post name:meepo");
+    }
+
+    @Test
     public void test404() {
         String response  = getHttpString("/not_exist.html");
         Assert.assertTrue(StrUtil.containsAny(response, "HTTP/1.1 404 Not Found"));
@@ -78,6 +100,12 @@ public class PortCheck {
     public void JavaeeHello() {
         String html = getContentString("/javaee/hello");
         Assert.assertEquals(html,"Hello JavaServer-Alpha from HelloServlet@javaee");
+    }
+
+    @Test
+    public void Header() {
+        String html = getContentString("/javaee/header");
+        Assert.assertEquals(html,"mini browser");
     }
 
     private byte[] getContentBytes(String uri) {

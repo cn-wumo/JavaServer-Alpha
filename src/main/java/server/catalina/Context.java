@@ -21,7 +21,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class Context {
@@ -34,11 +33,12 @@ public class Context {
     private final Map<String, String> className_servletName;
     private final WebappClassLoader webappClassLoader;
     private final Map<String, Map<String, String>> servlet_className_init_params;
+    private List<String> loadOnStartupServletClassNames;
     private final Host host;
     private final ServletContext servletContext;
     private boolean reloadable;
     private ContextFileChangeWatcher contextFileChangeWatcher;
-    private Map<Class<?>, HttpServlet> servletPool;
+    private final Map<Class<?>, HttpServlet> servletPool;
 
     public Context(String path, String docBase,Host host,boolean reloadable) {
         TimeInterval timeInterval = DateUtil.timer();
@@ -54,6 +54,7 @@ public class Context {
         this.host = host;
         this.reloadable = reloadable;
         this.servlet_className_init_params = new HashMap<>();
+        this.loadOnStartupServletClassNames = new ArrayList<>();
 
         ClassLoader commonClassLoader = Thread.currentThread().getContextClassLoader();
         this.webappClassLoader = new WebappClassLoader(docBase, commonClassLoader);
@@ -122,8 +123,9 @@ public class Context {
         }
         String xml = FileUtil.readUtf8String(contextWebXmlFile);
         Document d = Jsoup.parse(xml);
-        parseServletMapping(d);
-        parseServletInitParams(d);
+        this.parseServletMapping(d);
+        this.parseServletInitParams(d);
+        this.handleLoadOnStartup();
     }
 
     private void deploy() {
@@ -152,6 +154,17 @@ public class Context {
             servletPool.put(clazz, servlet);
         }
         return servlet;
+    }
+
+    public void handleLoadOnStartup() {
+        for (String loadOnStartupServletClassName : loadOnStartupServletClassNames) {
+            try {
+                Class<?> clazz = webappClassLoader.loadClass(loadOnStartupServletClassName);
+                getServlet(clazz);
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | ServletException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void parseServletInitParams(Document d) {
