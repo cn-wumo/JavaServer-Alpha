@@ -6,6 +6,10 @@
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
     <mime-mapping>
         <extension>123</extension>
         <mime-type>application/vnd.lotus-1-2-3</mime-type>

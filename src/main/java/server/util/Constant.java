@@ -5,9 +5,10 @@ import cn.hutool.system.SystemUtil;
 import java.io.File;
 
 public class Constant {
-    public final static String response_head_202 =
+    public static final String response_head_202 =
             "HTTP/1.1 200 OK\r\n" +
-            "Content-Type: {}\r\n\r\n";
+            "Content-Type: {}{}" +
+            "\r\n\r\n";
     public static final String response_head_404 =
             "HTTP/1.1 404 Not Found\r\n" +
             "Content-Type: text/html\r\n\r\n";
@@ -42,6 +43,7 @@ public class Constant {
             "<u>The server encountered an internal error that prevented it from fulfilling this request.</u></p>" +
             "<p>Stacktrace:</p>" + "<pre>{}</pre>" + "<HR size='1' noshade='noshade'><h3>DiyTocmat 1.0.1</h3>" +
             "</body></html>";
+
     public final static File webappsFolder = new File(SystemUtil.get("user.dir"), "webapps");
     public final static File rootFolder = new File(webappsFolder,"ROOT");
 

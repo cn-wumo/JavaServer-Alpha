@@ -11,9 +11,12 @@ import server.catalina.Service;
 import server.util.MiniBrowser;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -29,7 +32,8 @@ public class Request extends BaseRequest {
     private String queryString;
     private Map<String, String[]> parameterMap;
     private Map<String, String> headerMap;
-
+    private Cookie[] cookies;
+    private HttpSession session;
 
     public Request(Socket socket,Service service) throws IOException {
         this.socket = socket;
@@ -49,6 +53,7 @@ public class Request extends BaseRequest {
         }
         this.parseParameters();
         this.parseHeaders();
+        this.parseCookies();
     }
 
     private void parseHttpRequest() throws IOException {
@@ -83,10 +88,6 @@ public class Request extends BaseRequest {
 
     public String getUri() {
         return uri;
-    }
-
-    public String getRequestString(){
-        return requestString;
     }
 
     public Context getContext() {
@@ -140,8 +141,40 @@ public class Request extends BaseRequest {
             String headerName = segs[0].toLowerCase();
             String headerValue = segs[1];
             headerMap.put(headerName, headerValue);
-            // System.out.println(line);
         }
+    }
+
+    private void parseCookies() {
+        List<Cookie> cookieList = new ArrayList<>();
+        String cookies = headerMap.get("cookie");
+        if (null != cookies) {
+            String[] pairs = StrUtil.split(cookies, ";");
+            for (String pair : pairs) {
+                if (StrUtil.isBlank(pair))
+                    continue;
+                String[] segs = StrUtil.split(pair, "=");
+                String name = segs[0].trim();
+                String value = segs[1].trim();
+                Cookie cookie = new Cookie(name, value);
+                cookieList.add(cookie);
+            }
+        }
+        this.cookies = ArrayUtil.toArray(cookieList, Cookie.class);
+    }
+
+    public String getJSessionIdFromCookie() {
+        if (null == cookies)
+            return null;
+        for (Cookie cookie : cookies) {
+            if ("JSESSIONID".equals(cookie.getName())) {
+                return cookie.getValue();
+            }
+        }
+        return null;
+    }
+
+    public void setSession(HttpSession session){
+        this.session = session;
     }
 
     @Override
@@ -191,5 +224,88 @@ public class Request extends BaseRequest {
         String value = headerMap.get(name);
         return Convert.toInt(value, 0);
     }
-
+    @Override
+    public String getLocalAddr() {
+        return socket.getLocalAddress().getHostAddress();
+    }
+    @Override
+    public String getLocalName() {
+        return socket.getLocalAddress().getHostName();
+    }
+    @Override
+    public int getLocalPort() {
+        return socket.getLocalPort();
+    }
+    @Override
+    public String getProtocol() {
+        return "HTTP:/1.1";
+    }
+    @Override
+    public String getRemoteAddr() {
+        InetSocketAddress isa = (InetSocketAddress) socket.getRemoteSocketAddress();
+        String temp = isa.getAddress().toString();
+        return StrUtil.subAfter(temp, "/", false);
+    }
+    @Override
+    public String getRemoteHost() {
+        InetSocketAddress isa = (InetSocketAddress) socket.getRemoteSocketAddress();
+        return isa.getHostName();
+    }
+    @Override
+    public int getRemotePort() {
+        return socket.getPort();
+    }
+    @Override
+    public String getScheme() {
+        return "http";
+    }
+    @Override
+    public String getServerName() {
+        return getHeader("host").trim();
+    }
+    @Override
+    public int getServerPort() {
+        return getLocalPort();
+    }
+    @Override
+    public String getContextPath() {
+        String result = this.context.getPath();
+        if ("/".equals(result))
+            return "";
+        return result;
+    }
+    @Override
+    public String getRequestURI() {
+        return uri;
+    }
+    @Override
+    public StringBuffer getRequestURL() {
+        StringBuffer url = new StringBuffer();
+        String scheme = getScheme();
+        int port = getServerPort();
+        if (port < 0) {
+            port = 80; // Work around java.net.URL bug
+        }
+        url.append(scheme);
+        url.append("://");
+        url.append(getServerName());
+        if ((scheme.equals("http") && (port != 80)) || (scheme.equals("https") && (port != 443))) {
+            url.append(':');
+            url.append(port);
+        }
+        url.append(getRequestURI());
+        return url;
+    }
+    @Override
+    public String getServletPath() {
+        return uri;
+    }
+    @Override
+    public Cookie[] getCookies() {
+        return cookies;
+    }
+    @Override
+    public HttpSession getSession() {
+        return session;
+    }
 }

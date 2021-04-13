@@ -8,7 +8,9 @@ import server.servlets.InvokerServlet;
 import server.util.Constant;
 import server.http.Request;
 import server.http.Response;
+import server.util.SessionManager;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -21,6 +23,7 @@ public class HttpProcessor {
             System.out.println("uri:"+uri);
             Context context = request.getContext();
             String servletClassName = context.getServletClassName(uri);
+            this.prepareSession(request, response);
             if(null!=servletClassName){
                 InvokerServlet.getInstance().service(request,response);
             }else {
@@ -40,7 +43,8 @@ public class HttpProcessor {
     private static void handle200(Socket socket, Response response) throws IOException {
         String contentType = response.getContentType();
         String headText = Constant.response_head_202;
-        headText = StrUtil.format(headText, contentType);
+        String cookiesHeader = response.getCookiesHeader();
+        headText = StrUtil.format(headText, contentType, cookiesHeader);
         byte[] head = headText.getBytes();
 
         byte[] body = response.getBody();
@@ -87,5 +91,11 @@ public class HttpProcessor {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
+    }
+
+    public void prepareSession(Request request, Response response) {
+        String jsessionid = request.getJSessionIdFromCookie();
+        HttpSession session = SessionManager.getSession(jsessionid, request, response);
+        request.setSession(session);
     }
 }

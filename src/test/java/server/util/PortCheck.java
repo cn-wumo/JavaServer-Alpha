@@ -2,12 +2,18 @@ package server.util;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.StrUtil;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -106,6 +112,32 @@ public class PortCheck {
     public void Header() {
         String html = getContentString("/javaee/header");
         Assert.assertEquals(html,"mini browser");
+    }
+
+    @Test
+    public void Cookie() throws IOException {
+        URL url = new URL(StrUtil.format("http://{}:{}{}", ip,port,"/javaee/getCookie"));
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestProperty("Cookie","name=java(cookie)");
+        conn.connect();
+        InputStream is = conn.getInputStream();
+        String html = IoUtil.read(is, StandardCharsets.UTF_8);
+        Assert.assertTrue(StrUtil.containsAny(html,"name:java(cookie)"));
+    }
+
+    @Test
+    public void Session() throws IOException {
+        String jsessionid = getContentString("/javaee/setSession");
+        if(null!=jsessionid)
+            jsessionid = jsessionid.trim();
+        String url = StrUtil.format("http://{}:{}{}", ip,port,"/javaee/getSession");
+        URL u = new URL(url);
+        HttpURLConnection conn = (HttpURLConnection) u.openConnection();
+        conn.setRequestProperty("Cookie","JSESSIONID="+jsessionid);
+        conn.connect();
+        InputStream is = conn.getInputStream();
+        String html = IoUtil.read(is, StandardCharsets.UTF_8);
+        Assert.assertTrue(StrUtil.containsAny(html,"java(session)"));
     }
 
     private byte[] getContentBytes(String uri) {
