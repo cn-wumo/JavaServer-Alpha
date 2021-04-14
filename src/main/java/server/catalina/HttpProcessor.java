@@ -2,6 +2,7 @@ package server.catalina;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.ZipUtil;
 import cn.hutool.log.LogFactory;
 import server.servlets.DefaultServlet;
 import server.servlets.InvokerServlet;
@@ -30,7 +31,7 @@ public class HttpProcessor {
                 DefaultServlet.getInstance().service(request,response);
             }
             if(Constant.CODE_200 == response.getStatus()){
-                handle200(socket, response);
+                handle200(socket, request, response);
             }
             if(Constant.CODE_404 == response.getStatus()){
                 handle404(socket, uri);
@@ -40,22 +41,56 @@ public class HttpProcessor {
             handle500(socket,e);
         }
     }
-    private static void handle200(Socket socket, Response response) throws IOException {
+    private void handle200(Socket s, Request request, Response response)
+            throws IOException {
+        OutputStream os = s.getOutputStream();
         String contentType = response.getContentType();
-        String headText = Constant.response_head_202;
-        String cookiesHeader = response.getCookiesHeader();
-        headText = StrUtil.format(headText, contentType, cookiesHeader);
-        byte[] head = headText.getBytes();
-
         byte[] body = response.getBody();
-
+        String cookiesHeader = response.getCookiesHeader();
+        boolean gzip = isGzip(request, body, contentType);
+        String headText;
+        if (gzip)
+            headText = Constant.response_head_200_gzip;
+        else
+            headText = Constant.response_head_200;
+        headText = StrUtil.format(headText, contentType, cookiesHeader);
+        if (gzip)
+            body = ZipUtil.gzip(body);
+        byte[] head = headText.getBytes();
         byte[] responseBytes = new byte[head.length + body.length];
         ArrayUtil.copy(head, 0, responseBytes, 0, head.length);
         ArrayUtil.copy(body, 0, responseBytes, head.length, body.length);
+        os.write(responseBytes,0,responseBytes.length);
+        os.flush();
+        os.close();
+    }
 
-        OutputStream os = socket.getOutputStream();
-        os.write(responseBytes);
-        socket.close();
+    private boolean isGzip(Request request, byte[] body, String mimeType) {
+        String acceptEncodings=  request.getHeader("Accept-Encoding");
+        if(!StrUtil.containsAny(acceptEncodings, "gzip"))
+            return false;
+        Connector connector = request.getConnector();
+        if (mimeType.contains(";"))
+            mimeType = StrUtil.subBefore(mimeType, ";", false);
+        if (!"on".equals(connector.getCompression()))
+            return false;
+        if (body.length < connector.getCompressionMinSize())
+            return false;
+        String userAgents = connector.getNoCompressionUserAgents();
+        String[] eachUserAgents = userAgents.split(",");
+        for (String eachUserAgent : eachUserAgents) {
+            eachUserAgent = eachUserAgent.trim();
+            String userAgent = request.getHeader("User-Agent");
+            if (StrUtil.equals(userAgent, eachUserAgent))
+                return false;
+        }
+        String mimeTypes = connector.getCompressibleMimeType();
+        String[] eachMimeTypes = mimeTypes.split(",");
+        for (String eachMimeType : eachMimeTypes) {
+            if (mimeType.equals(eachMimeType))
+                return true;
+        }
+        return false;
     }
 
     private void handle404(Socket socket, String uri) throws IOException {

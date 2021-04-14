@@ -5,6 +5,7 @@ import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.ZipUtil;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -140,12 +141,20 @@ public class PortCheck {
         Assert.assertTrue(StrUtil.containsAny(html,"java(session)"));
     }
 
+    @Test
+    public void Gzip() {
+        byte[] gzipContent = getContentBytes("/",true);
+        byte[] unGzipContent = ZipUtil.unGzip(gzipContent);
+        String html = new String(unGzipContent);
+        Assert.assertEquals(html, "Hello JavaServer-Alpha@ROOT");
+    }
+
     private byte[] getContentBytes(String uri) {
         return getContentBytes(uri,false);
     }
     private byte[] getContentBytes(String uri,boolean gzip) {
         String url = StrUtil.format("http://{}:{}{}", ip,port,uri);
-        return MiniBrowser.getContentBytes(url,false);
+        return MiniBrowser.getContentBytes(url,gzip);
     }
 
     private String getContentString(String uri) {

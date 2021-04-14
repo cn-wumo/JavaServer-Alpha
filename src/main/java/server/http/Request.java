@@ -5,6 +5,7 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
+import server.catalina.Connector;
 import server.catalina.Context;
 import server.catalina.Engine;
 import server.catalina.Service;
@@ -27,7 +28,7 @@ public class Request extends BaseRequest {
     private String uri;
     private final Socket socket;
     private Context context;
-    private final Service service;
+    private final Connector connector;
     private String method;
     private String queryString;
     private Map<String, String[]> parameterMap;
@@ -35,9 +36,9 @@ public class Request extends BaseRequest {
     private Cookie[] cookies;
     private HttpSession session;
 
-    public Request(Socket socket,Service service) throws IOException {
+    public Request(Socket socket,Connector connector) throws IOException {
         this.socket = socket;
-        this.service = service;
+        this.connector = connector;
         this.parseHttpRequest();
         if(StrUtil.isEmpty(requestString))
             return;
@@ -73,7 +74,7 @@ public class Request extends BaseRequest {
 
     private void parseContext() {
         String path = StrUtil.subBetween(uri, "/", "/");
-        Engine engine = service.getEngine();
+        Engine engine = connector.getService().getEngine();
         context = engine.getDefaultHost().getContext(uri);
         if(null!=context)
             return;
@@ -171,6 +172,10 @@ public class Request extends BaseRequest {
             }
         }
         return null;
+    }
+
+    public Connector getConnector() {
+        return connector;
     }
 
     public void setSession(HttpSession session){

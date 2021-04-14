@@ -11,7 +11,12 @@ import java.net.Socket;
 
 public class Connector implements Runnable {
     int port;
-    private Service service;
+    private final Service service;
+    private String compression;
+    private int compressionMinSize;
+    private String noCompressionUserAgents;
+    private String compressibleMimeType;
+
     public Connector(Service service) {
         this.service = service;
     }
@@ -43,7 +48,7 @@ public class Connector implements Runnable {
                 Socket socket =  serverSocket.accept();
                 Runnable r = () -> {
                     try {
-                        Request request = new Request(socket, service);
+                        Request request = new Request(socket, Connector.this);
                         Response response = new Response();
                         HttpProcessor processor = new HttpProcessor();
                         processor.execute(socket,request, response);
@@ -56,5 +61,30 @@ public class Connector implements Runnable {
         } catch (IOException e) {
             LogFactory.get().error(e);
         }
+    }
+
+    public String getCompression() {
+        return compression;
+    }
+    public void setCompression(String compression) {
+        this.compression = compression;
+    }
+    public int getCompressionMinSize() {
+        return compressionMinSize;
+    }
+    public void setCompressionMinSize(int compressionMinSize) {
+        this.compressionMinSize = compressionMinSize;
+    }
+    public String getNoCompressionUserAgents() {
+        return noCompressionUserAgents;
+    }
+    public void setNoCompressionUserAgents(String noCompressionUserAgents) {
+        this.noCompressionUserAgents = noCompressionUserAgents;
+    }
+    public String getCompressibleMimeType() {
+        return compressibleMimeType;
+    }
+    public void setCompressibleMimeType(String compressibleMimeType) {
+        this.compressibleMimeType = compressibleMimeType;
     }
 }
