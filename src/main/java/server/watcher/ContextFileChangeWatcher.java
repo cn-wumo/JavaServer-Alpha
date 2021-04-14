@@ -22,7 +22,7 @@ public class ContextFileChangeWatcher {
                         return;
                     if (fileName.endsWith(".jar") || fileName.endsWith(".class") || fileName.endsWith(".xml")) {
                         stop = true;
-                        LogFactory.get().info(ContextFileChangeWatcher.this + " 检测到了Web应用下的重要文件变化 {} " , fileName);
+                        LogFactory.get().info(ContextFileChangeWatcher.this + " 检测到了Web应用下的重要文件变化 {} ", fileName);
                         context.reload();
                     }
 

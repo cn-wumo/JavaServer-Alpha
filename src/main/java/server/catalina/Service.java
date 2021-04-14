@@ -7,27 +7,41 @@ import server.util.ServerXMLUtil;
 
 import java.util.List;
 
+/**
+* @Description: JavaServer-Alpha服务实例，建造connectors多线程以提供服务器的多端口链接
+* @Author: cn-wumo
+* @Date: 2021/4/14
+*/
 public class Service {
-    private String name;
-    private Engine engine;
-    private Server server;
-    private List<Connector> connectors;
+    private final String name;
+    private final Engine engine;
+    private final Server server;
+    private final List<Connector> connectors;
+
     public Service(Server server){
         this.server = server;
         this.name = ServerXMLUtil.getServiceName();
-        this.connectors = ServerXMLUtil.getConnectors(this);
+        this.connectors = ServerXMLUtil.getConnectors(this);    //从XML文件里读取端口配置
         this.engine = new Engine(this);
     }
 
     public void start() {
-        init();
+        this.init();
     }
 
+    /**
+    * @Description: 初始化且启动Connector
+    * @Param: []
+    * @return: void
+    * @Throws void
+    * @Author: cn-wumo
+    * @Date: 2021/4/14
+    */
     private void init() {
         TimeInterval timeInterval = DateUtil.timer();
         for (Connector c : connectors)
             c.init();
-        LogFactory.get().info("Initialization processed in {} ms",timeInterval.intervalMs());
+        LogFactory.get().info("进程在{}毫秒内初始化",timeInterval.intervalMs());
         for (Connector c : connectors)
             c.start();
     }

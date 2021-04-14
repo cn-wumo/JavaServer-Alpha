@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class Host {
     private String name;
@@ -40,7 +41,7 @@ public class Host {
     }
 
     private  void scanContextsOnWebAppsFolder() {
-        File[] folders = Constant.webappsFolder.listFiles();
+        File[] folders = Optional.ofNullable(Constant.webappsFolder.listFiles()).orElse(new File[]{});
         for (File folder : folders) {
             if (!folder.isDirectory())
                 continue;
@@ -60,19 +61,15 @@ public class Host {
     }
 
     public void reload(Context context) {
-        LogFactory.get().info("Reloading Context with name [{}] has started", context.getPath());
+        LogFactory.get().info("正在重新加载 [{}]", context.getPath());
         String path = context.getPath();
         String docBase = context.getDocBase();
         boolean reloadable = context.isReloadable();
-        // stop
         context.stop();
-        // remove
         contextMap.remove(path);
-        // allocate new context
         Context newContext = new Context(path, docBase, this, reloadable);
-        // assign it to map
         contextMap.put(newContext.getPath(), newContext);
-        LogFactory.get().info("Reloading Context with name [{}] has completed", context.getPath());
+        LogFactory.get().info("重新加载 [{}] 已完成", context.getPath());
     }
 
 

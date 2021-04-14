@@ -36,6 +36,10 @@ public class PortCheck {
         }
     }
     @Test
+    public void Anything(){
+    }
+
+    @Test
     public void Test() {
         String html = getContentString("/");
         Assert.assertEquals(html,"Hello JavaServer-Alpha@ROOT");

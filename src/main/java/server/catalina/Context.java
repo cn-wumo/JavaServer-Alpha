@@ -58,9 +58,9 @@ public class Context {
 
         ClassLoader commonClassLoader = Thread.currentThread().getContextClassLoader();
         this.webappClassLoader = new WebappClassLoader(docBase, commonClassLoader);
+        LogFactory.get().info("正在部署web应用项目 {}", this.docBase);
         deploy();
-        LogFactory.get().info("Deploying web application directory {}", this.docBase);
-        LogFactory.get().info("Deployment of web application directory {} has finished in {} ms", this.docBase,timeInterval.intervalMs());
+        LogFactory.get().info("web应用项目 {} 在 {} 毫秒内部署完成", this.docBase,timeInterval.intervalMs());
     }
 
     private void parseServletMapping(Document d) {

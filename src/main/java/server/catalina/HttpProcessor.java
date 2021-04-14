@@ -17,7 +17,13 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
+/**
+* @Description: Http协议处理器，Http业务的具体实现类
+* @Author: cn-wumo
+* @Date: 2021/4/14
+*/
 public class HttpProcessor {
+
     public void execute(Socket socket, Request request, Response response){
         try{
             String uri = request.getUri();
@@ -105,13 +111,13 @@ public class HttpProcessor {
         try {
             OutputStream os = socket.getOutputStream();
             StackTraceElement[] traceElements = e.getStackTrace();
-            StringBuffer stringBuffer = new StringBuffer();
-            stringBuffer.append(e);
-            stringBuffer.append("\r\n");
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(e);
+            stringBuilder.append("\r\n");
             for (StackTraceElement ste : traceElements) {
-                stringBuffer.append("\t");
-                stringBuffer.append(ste.toString());
-                stringBuffer.append("\r\n");
+                stringBuilder.append("\t");
+                stringBuilder.append(ste.toString());
+                stringBuilder.append("\r\n");
             }
 
             String msg = e.getMessage();
@@ -119,7 +125,7 @@ public class HttpProcessor {
             if (null != msg && msg.length() > 20)
                 msg = msg.substring(0, 19);
 
-            String text = StrUtil.format(Constant.textFormat_500, msg, e.toString(), stringBuffer.toString());
+            String text = StrUtil.format(Constant.textFormat_500, msg, e.toString(), stringBuilder.toString());
             text = Constant.response_head_500 + text;
             byte[] responseBytes = text.getBytes(StandardCharsets.UTF_8);
             os.write(responseBytes);

@@ -8,39 +8,66 @@ import cn.hutool.system.SystemUtil;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 
+/**
+* @Description: JavaServer-Alpha服务器，提供服务器启动前的准备服务
+* @Author: cn-wumo
+* @Date: 2021/4/14
+*/
 public class Server {
     private final Service service;
+
     public Server(){
         this.service = new Service(this);
     }
 
+    /**
+    * @Description: 服务器的启动接口
+    * @Param: []
+    * @return: void
+    * @Throws void
+    * @Author: cn-wumo
+    * @Date: 2021/4/14
+    */
     public void start(){
         TimeInterval timeInterval = DateUtil.timer();
-        logJVM();
-        init();
-        LogFactory.get().info("Server startup in {} ms",timeInterval.intervalMs());
+        Server.logVM();
+        this.init();
+        LogFactory.get().info("服务器在{}毫秒内启动",timeInterval.intervalMs());
     }
-
+    
+    /**
+    * @Description: 服务器的初始化
+    * @Param: []
+    * @return: void
+    * @Throws void
+    * @Author: cn-wumo
+    * @Date: 2021/4/14
+    */
     private void init() {
         service.start();
     }
 
-    private static void logJVM() {
+    /**
+    * @Description: 打印虚拟机信息
+    * @Param: []
+    * @return: void
+    * @Throws void
+    * @Author: cn-wumo
+    * @Date: 2021/4/14
+    */
+    private static void logVM() {
         Map<String,String> infos = new LinkedHashMap<>();
-        infos.put("Server version", "JavaServer-Alpha");
-        infos.put("Server built", new Date().toString());
-        infos.put("Server number", "1.0.1");
-        infos.put("OS Name\t", SystemUtil.get("os.name"));
-        infos.put("OS Version", SystemUtil.get("os.version"));
-        infos.put("Architecture", SystemUtil.get("os.arch"));
-        infos.put("Java Home", SystemUtil.get("java.home"));
-        infos.put("JVM Version", SystemUtil.get("java.runtime.version"));
-        infos.put("JVM Vendor", SystemUtil.get("java.vm.specification.vendor"));
-        Set<String> keys = infos.keySet();
-        for (String key : keys) {
-            LogFactory.get().info(key+":\t\t" + infos.get(key));
-        }
+        infos.put("服务器名称", "JavaServer-Alpha");
+        infos.put("服务器建造时间", new Date().toString());
+        infos.put("服务器版本", "1.0.2");
+        infos.put("宿主操作系统\t", SystemUtil.get("os.name"));
+        infos.put("宿主操作系统版本", SystemUtil.get("os.version"));
+        infos.put("处理器架构", SystemUtil.get("os.arch"));
+        infos.put("虚拟机路径", SystemUtil.get("java.home"));
+        infos.put("虚拟机版本", SystemUtil.get("java.runtime.version"));
+        infos.put("虚拟机供应商", SystemUtil.get("java.vm.specification.vendor"));
+
+        infos.forEach((key,value)-> LogFactory.get().info(key+":\t" + value));
     }
 }

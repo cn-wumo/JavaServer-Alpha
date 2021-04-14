@@ -18,7 +18,7 @@ public class Engine {
 
     private void checkDefault() {
         if(null==getDefaultHost())
-            throw new RuntimeException("the defaultHost" + defaultHost + " does not exist!");
+            throw new RuntimeException("默认端口" + defaultHost + " 不存在！");
     }
 
     public Host getDefaultHost(){
