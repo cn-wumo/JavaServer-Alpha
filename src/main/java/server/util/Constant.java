@@ -3,7 +3,11 @@ package server.util;
 import cn.hutool.system.SystemUtil;
 
 import java.io.File;
-
+/**
+* 服务器的常量数据，如200状态的模板，404状态的模板等
+* @author cn-wumo
+* @since 2021/4/15
+*/
 public class Constant {
     public static final String response_head_200 =
             "HTTP/1.1 200 OK\r\n" +

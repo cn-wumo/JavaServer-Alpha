@@ -8,9 +8,9 @@ import server.util.ServerXMLUtil;
 import java.util.List;
 
 /**
-* @Description: JavaServer-Alpha服务实例，建造connectors多线程以提供服务器的多端口链接
-* @Author: cn-wumo
-* @Date: 2021/4/14
+* JavaServer-Alpha服务实例，建造connectors多线程以提供服务器的多端口链接
+* @author cn-wumo
+* @since 2021/4/15
 */
 public class Service {
     private final String name;
@@ -30,12 +30,9 @@ public class Service {
     }
 
     /**
-    * @Description: 初始化且启动Connector
-    * @Param: []
-    * @return: void
-    * @Throws void
-    * @Author: cn-wumo
-    * @Date: 2021/4/14
+    * 初始化且启动Connector
+    * @author cn-wumo
+    * @since 2021/4/15
     */
     private void init() {
         TimeInterval timeInterval = DateUtil.timer();

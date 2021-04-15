@@ -10,9 +10,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
-* @Description: JavaServer-Alpha服务器，提供服务器启动前的准备服务
-* @Author: cn-wumo
-* @Date: 2021/4/14
+* JavaServer-Alpha服务器，提供服务器启动前的准备服务
+* @author cn-wumo
+* @since 2021/4/15
 */
 public class Server {
     private final Service service;
@@ -22,12 +22,9 @@ public class Server {
     }
 
     /**
-    * @Description: 服务器的启动接口
-    * @Param: []
-    * @return: void
-    * @Throws void
-    * @Author: cn-wumo
-    * @Date: 2021/4/14
+    * 服务器的启动接口
+    * @author cn-wumo
+    * @since 2021/4/15
     */
     public void start(){
         TimeInterval timeInterval = DateUtil.timer();
@@ -37,24 +34,18 @@ public class Server {
     }
     
     /**
-    * @Description: 服务器的初始化
-    * @Param: []
-    * @return: void
-    * @Throws void
-    * @Author: cn-wumo
-    * @Date: 2021/4/14
+    * 服务器的初始化
+    * @author cn-wumo
+    * @since 2021/4/15
     */
     private void init() {
         service.start();
     }
 
     /**
-    * @Description: 打印虚拟机信息
-    * @Param: []
-    * @return: void
-    * @Throws void
-    * @Author: cn-wumo
-    * @Date: 2021/4/14
+    * 打印虚拟机信息
+    * @author cn-wumo
+    * @since 2021/4/15
     */
     private static void logVM() {
         Map<String,String> infos = new LinkedHashMap<>();
