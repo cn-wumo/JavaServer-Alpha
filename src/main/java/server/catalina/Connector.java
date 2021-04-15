@@ -10,9 +10,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
-* @Description: 服务器连接器，接收Socket并构建request和response
-* @Author: cn-wumo
-* @Date: 2021/4/14
+* 服务器连接器，接收Socket并构建request和response
+* @author cn-wumo
+* @since 2021/4/15
 */
 public class Connector implements Runnable {
     private final int port;
@@ -23,10 +23,11 @@ public class Connector implements Runnable {
     private String compressibleMimeType;
 
     /**
-    * @Description: 链接service服务实例，选择链接端口
-    * @Param: [service, port]
-    * @Author: cn-wumo
-    * @Date: 2021/4/14
+    * 链接service服务实例，选择服务端口
+    * @param service service服务实例
+ 	* @param port 服务端口
+    * @author cn-wumo
+    * @since 2021/4/15
     */
     public Connector(Service service,int port) {
         this.service = service;
@@ -34,12 +35,9 @@ public class Connector implements Runnable {
     }
 
     /**
-    * @Description: Connector的具体初始化流程
-    * @Param: []
-    * @return: void
-    * @Throws void
-    * @Author: cn-wumo
-    * @Date: 2021/4/14
+    * Connector的具体初始化流程
+    * @author cn-wumo
+    * @since 2021/4/15
     */
     public void init() {
         LogFactory.get().info("初始化协议处理器 [http-bio-{}]", port);
@@ -51,12 +49,9 @@ public class Connector implements Runnable {
     }
     
     /**
-    * @Description: 自旋获取客户端发送的Socket，具体业务在HttpProcessor中处理
-    * @Param: []
-    * @return: void
-    * @Throws void
-    * @Author: cn-wumo
-    * @Date: 2021/4/14
+    * 自旋获取客户端发送的Socket，具体业务在HttpProcessor中处理
+    * @author cn-wumo
+    * @since 2021/4/15
     */
     @Override
     @SuppressWarnings("InfiniteLoopStatement")

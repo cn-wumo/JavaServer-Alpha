@@ -18,9 +18,9 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 /**
-* @Description: Http协议处理器，Http业务的具体实现类
-* @Author: cn-wumo
-* @Date: 2021/4/14
+* Http协议处理器，Http业务的具体实现类
+* @author cn-wumo
+* @since 2021/4/15
 */
 public class HttpProcessor {
 

@@ -156,6 +156,7 @@ public class PortCheck {
     private byte[] getContentBytes(String uri) {
         return getContentBytes(uri,false);
     }
+
     private byte[] getContentBytes(String uri,boolean gzip) {
         String url = StrUtil.format("http://{}:{}{}", ip,port,uri);
         return MiniBrowser.getContentBytes(url,gzip);

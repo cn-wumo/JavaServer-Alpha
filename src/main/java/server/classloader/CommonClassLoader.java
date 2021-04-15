@@ -7,17 +7,16 @@ import java.net.URLClassLoader;
 import java.util.Optional;
 
 /**
-* @Description: 公共类加载器
-* @Author: cn-wumo
-* @Date: 2021/4/14
+* 公共类加载器
+* @author cn-wumo
+* @since 2021/4/15
 */
 public class CommonClassLoader extends URLClassLoader {
 
     /**
-    * @Description: 将web程序的依赖包路径读入
-    * @Param: []
-    * @Author: cn-wumo
-    * @Date: 2021/4/14
+    * 将web程序的依赖包路径读入
+    * @author cn-wumo
+    * @since 2021/4/15
     */
     public CommonClassLoader() {
         super(new URL[]{});
