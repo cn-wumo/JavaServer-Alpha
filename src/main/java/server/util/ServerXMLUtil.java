@@ -11,7 +11,20 @@ import server.catalina.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+* Server.xml文件的工具类
+* @author cn-wumo
+* @since 2021/4/16
+*/
 public class ServerXMLUtil {
+    
+    /**
+    * 从Server.xml中读取服务器的Contexts配置，例如web服务器的工件上下文，web服务器的路径和是否自动重载
+    * @param host 主机地址
+    * @return java.util.List<server.catalina.Context>
+    * @author cn-wumo
+    * @since 2021/4/16
+    */
     public static List<Context> getContexts(Host host) {
         List<Context> result = new ArrayList<>();
         String xml = FileUtil.readUtf8String(Constant.serverXmlFile);
@@ -28,6 +41,12 @@ public class ServerXMLUtil {
         return result;
     }
 
+    /**
+    * 获取引擎的默认主机地址，默认设置localhost
+    * @return java.lang.String
+    * @author cn-wumo
+    * @since 2021/4/16
+    */
     public static String getEngineDefaultHost() {
         String xml = FileUtil.readUtf8String(Constant.serverXmlFile);
         Document d = Jsoup.parse(xml);
@@ -36,6 +55,12 @@ public class ServerXMLUtil {
         return host.attr("defaultHost");
     }
 
+    /**
+    * 获取服务实例的名称，默认是Catalina
+    * @return java.lang.String
+    * @author cn-wumo
+    * @since 2021/4/16
+    */
     public static String getServiceName() {
         String xml = FileUtil.readUtf8String(Constant.serverXmlFile);
         Document d = Jsoup.parse(xml);
@@ -43,6 +68,13 @@ public class ServerXMLUtil {
         return host.attr("name");
     }
 
+    /**
+    * 获得服务器引擎下辖的主机地址，默认包含localhost
+    * @param engine 服务器引擎
+    * @return java.util.List<server.catalina.Host>
+    * @author cn-wumo
+    * @since 2021/4/16
+    */
     public static List<Host> getHosts(Engine engine) {
         List<Host> result = new ArrayList<>();
         String xml = FileUtil.readUtf8String(Constant.serverXmlFile);
@@ -57,6 +89,13 @@ public class ServerXMLUtil {
         return result;
     }
 
+    /**
+    * 获取服务器实例下辖的服务器连接器
+    * @param service 服务器实例
+    * @return java.util.List<server.catalina.Connector>
+    * @author cn-wumo
+    * @since 2021/4/16
+    */
     public static List<Connector> getConnectors(Service service) {
         List<Connector> result = new ArrayList<>();
         String xml = FileUtil.readUtf8String(Constant.serverXmlFile);
@@ -68,6 +107,7 @@ public class ServerXMLUtil {
             int compressionMinSize = Convert.toInt(e.attr("compressionMinSize"), 0);
             String noCompressionUserAgents = e.attr("noCompressionUserAgents");
             String compressibleMimeType = e.attr("compressibleMimeType");
+
             Connector c = new Connector(service,port);
             c.setCompression(compression);
             c.setCompressibleMimeType(compressibleMimeType);
