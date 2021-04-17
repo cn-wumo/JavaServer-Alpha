@@ -34,6 +34,11 @@ public class Connector implements Runnable {
         this.port = port;
     }
 
+    public void start() {
+        LogFactory.get().info("启动协议处理器 [http-bio-{}]", port);
+        new Thread(this).start();
+    }
+
     /**
     * Connector的具体初始化流程
     * @author cn-wumo
@@ -41,11 +46,6 @@ public class Connector implements Runnable {
     */
     public void init() {
         LogFactory.get().info("初始化协议处理器 [http-bio-{}]", port);
-    }
-
-    public void start() {
-        LogFactory.get().info("启动协议处理器 [http-bio-{}]", port);
-        new Thread(this).start();
     }
     
     /**

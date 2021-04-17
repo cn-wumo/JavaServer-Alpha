@@ -5,10 +5,10 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
+import org.jsoup.internal.StringUtil;
 import server.catalina.Connector;
 import server.catalina.Context;
 import server.catalina.Engine;
-import server.catalina.Service;
 import server.util.MiniBrowser;
 
 import javax.servlet.ServletContext;
@@ -22,99 +22,140 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+/**
+* 客户端的请求类，保存客户端发完服务器的数据
+* @author cn-wumo
+* @since 2021/4/17
+*/
 public class Request extends BaseRequest {
 
-    private String requestString;
     private String uri;
     private final Socket socket;
     private Context context;
     private final Connector connector;
     private String method;
-    private String queryString;
     private Map<String, String[]> parameterMap;
     private Map<String, String> headerMap;
     private Cookie[] cookies;
     private HttpSession session;
 
+    /**
+    * 根据socket和connector构建新的请求类
+    * @param socket 服务器和客户端之间的socket
+ 	* @param connector 客户端所选择的服务连接器
+    * @author cn-wumo
+    * @since 2021/4/17
+    */
     public Request(Socket socket,Connector connector) throws IOException {
         this.socket = socket;
         this.connector = connector;
-        this.parseHttpRequest();
+
+        String requestString = Request.parseHttpRequest(socket);
         if(StrUtil.isEmpty(requestString))
             return;
-        this.parseUri();
-        this.parseContext();
-        this.parseMethod();
-        this.parameterMap = new HashMap<>();
-        this.headerMap = new HashMap<>();
+
+        this.uri = Request.parseUri(requestString);
+        this.context = Request.parseContext(uri,connector);
+        this.method = Request.parseMethod(requestString);
+        this.parameterMap = Request.parseParameters(requestString,method);
+        this.headerMap = Request.parseHeaders(requestString);
+        this.cookies = Request.parseCookies(headerMap);
+
         if(!"/".equals(context.getPath())) {
             this.uri = StrUtil.removePrefix(uri, context.getPath());
             if (StrUtil.isEmpty(uri))
                 this.uri = "/";
         }
-        this.parseParameters();
-        this.parseHeaders();
-        this.parseCookies();
     }
 
-    private void parseHttpRequest() throws IOException {
-        InputStream is = this.socket.getInputStream();
+    /**
+    * 从socket中获取http报文
+    * @param socket 服务器和客户端之间的socket
+    * @return java.lang.String
+    * @author cn-wumo
+    * @since 2021/4/17
+    */
+    private static String parseHttpRequest(Socket socket) throws IOException {
+        InputStream is = socket.getInputStream();
         byte[] bytes = MiniBrowser.readBytes(is,false);
-        requestString = new String(bytes, StandardCharsets.UTF_8);
+        return new String(bytes, StandardCharsets.UTF_8);
     }
 
-    private void parseUri() {
-        String temp = StrUtil.subBetween(requestString, " ", " ");
-        if (!StrUtil.contains(temp, '?')) {
-            this.uri = temp;
-        }else{
-            this.uri = StrUtil.subBefore(temp, '?', false);
-        }
+    /**
+    * 从http报文中获取uri
+    * @param requestString http报文
+    * @return java.lang.String
+    * @author cn-wumo
+    * @since 2021/4/17
+    */
+    private static String parseUri(String requestString) {
+        String uri = StrUtil.subBetween(requestString, " ", " ");
+        return StrUtil.subBefore(uri, '?', false);
     }
 
-    private void parseContext() {
-        String path = StrUtil.subBetween(uri, "/", "/");
+    /**
+    * 根据uri和服务连接器获取容器
+    * @param uri 客户端访问的uri地址
+ 	* @param connector  客户端选择的服务连接器
+    * @return server.catalina.Context
+    * @author cn-wumo
+    * @since 2021/4/17
+    */
+    private static Context parseContext(String uri,Connector connector) {
         Engine engine = connector.getService().getEngine();
-        context = engine.getDefaultHost().getContext(uri);
-        if(null!=context)
-            return;
-        if (null == path)
-            path = "/";
-        else
-            path = "/" + path;
-        context = engine.getDefaultHost().getContext(path);
-        if (null == context)
-            context = engine.getDefaultHost().getContext("/");
-    }
 
-    public String getUri() {
-        return uri;
-    }
+        Context context = engine.getDefaultHost().getContext(uri); //通过uri寻找容器
+        if(null == context){   //通过uri未找到容器
+            String path = StrUtil.subBetween(uri, "/", "/");
+            if (null == path)   //路径为空，访问根地址
+                path = "/";
+            else
+                path = "/" + path;  //路径不为空，访问对应的容器地址
 
-    public Context getContext() {
+            context = engine.getDefaultHost().getContext(path);
+            if (null == context)    //未找到容器地址，返回根地址
+                context = engine.getDefaultHost().getContext("/");
+        }
         return context;
     }
 
-    private void parseMethod() {
-        method = StrUtil.subBefore(requestString, " ", false);
+    /**
+    * 从http报文中获取method
+    * @param requestString http报文
+    * @return java.lang.String
+    * @author cn-wumo
+    * @since 2021/4/17
+    */
+    private static String parseMethod(String requestString) {
+        return StrUtil.subBefore(requestString, " ", false);
     }
 
-    public ServletContext getServletContext() {
-        return context.getServletContext();
-    }
-
-    private void parseParameters() {
-        if ("GET".equals(this.getMethod())) {
-            String url = StrUtil.subBetween(requestString, " ", " ");
-            if (StrUtil.contains(url, '?')) {
-                queryString = StrUtil.subAfter(url, '?', false);
+    /**
+    * 根据http报文和method获取查询参数
+    * @param requestString http报文
+ 	* @param method 提交方式method
+    * @return java.util.Map<java.lang.String,java.lang.String[]>
+    * @author cn-wumo
+    * @since 2021/4/17
+    */
+    private static Map<String, String[]> parseParameters(String requestString, String method) {
+        String queryString = null;
+        Map<String, String[]> parameterMap = new HashMap<>();
+        if ("GET".equals(method)) {
+            String uri = StrUtil.subBetween(requestString, " ", " ");
+            if (StrUtil.contains(uri, '?')) {
+                System.out.println(uri);
+                queryString = StrUtil.subAfter(uri, '?', false);
             }
-        }else if ("POST".equals(this.getMethod())) {
+        }else if ("POST".equals(method)) {
             queryString = StrUtil.subAfter(requestString, "\r\n\r\n", false);
         }
-        if (null == queryString)
-            return;
+
+        if (StringUtil.isBlank(queryString)){
+            return parameterMap;
+        }
         queryString = URLUtil.decode(queryString);
+
         String[] parameterValues = queryString.split("&");
         for (String parameterValue : parameterValues) {
             String[] nameValues = parameterValue.split("=");
@@ -128,12 +169,22 @@ public class Request extends BaseRequest {
             }
             parameterMap.put(name, values);
         }
+        return parameterMap;
     }
 
-    public void parseHeaders() {
+    /**
+    * 根据http报文获取响应报文头
+    * @param requestString http报文
+    * @return java.util.Map<java.lang.String,java.lang.String>
+    * @author cn-wumo
+    * @since 2021/4/17
+    */
+    private static Map<String, String> parseHeaders(String requestString) {
         StringReader stringReader = new StringReader(requestString);
         List<String> lines = new ArrayList<>();
         IoUtil.readLines(stringReader, lines);
+        Map<String, String> headerMap = new HashMap<>();
+
         for (int i = 1; i < lines.size(); i++) {
             String line = lines.get(i);
             if (0 == line.length())
@@ -143,9 +194,17 @@ public class Request extends BaseRequest {
             String headerValue = segs[1];
             headerMap.put(headerName, headerValue);
         }
+        return headerMap;
     }
 
-    private void parseCookies() {
+    /**
+    * 从响应报文头里获取Cookie
+    * @param headerMap 响应报文头
+    * @return javax.servlet.http.Cookie[]
+    * @author cn-wumo
+    * @since 2021/4/17
+    */
+    private static Cookie[] parseCookies(Map<String, String> headerMap) {
         List<Cookie> cookieList = new ArrayList<>();
         String cookies = headerMap.get("cookie");
         if (null != cookies) {
@@ -160,7 +219,19 @@ public class Request extends BaseRequest {
                 cookieList.add(cookie);
             }
         }
-        this.cookies = ArrayUtil.toArray(cookieList, Cookie.class);
+        return ArrayUtil.toArray(cookieList, Cookie.class);
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public ServletContext getServletContext() {
+        return context.getServletContext();
     }
 
     public String getJSessionIdFromCookie() {
@@ -289,7 +360,7 @@ public class Request extends BaseRequest {
         String scheme = getScheme();
         int port = getServerPort();
         if (port < 0) {
-            port = 80; // Work around java.net.URL bug
+            port = 80; // 默认端口80
         }
         url.append(scheme);
         url.append("://");

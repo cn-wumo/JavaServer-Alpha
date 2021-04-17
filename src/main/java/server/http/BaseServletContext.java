@@ -9,7 +9,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Set;
-
+/**
+* 实现ServletContext的傀儡类，无任何作用
+* @author cn-wumo
+* @since 2021/4/17
+*/
+@SuppressWarnings("all")
 public class BaseServletContext implements ServletContext {
     @Override
     public ServletContext getContext(String s) {

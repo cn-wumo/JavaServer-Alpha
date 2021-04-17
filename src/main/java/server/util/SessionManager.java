@@ -10,8 +10,10 @@ import server.http.StandardSession;
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
-import javax.swing.text.html.Option;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
 * 会话管理器，提供服务器会话所需的工具
@@ -29,7 +31,7 @@ public class SessionManager {
     * 根据客户端提供的Session的id获取相对应的Session实例
     * @param jsessionid 客户端提供的Jsessionid，单次会话具有唯一性
  	* @param request 客户端的请求对象
- 	* @param response 服务器的反应对象
+ 	* @param response 服务器的响应对象
     * @return javax.servlet.http.HttpSession
     * @author cn-wumo
     * @since 2021/4/16
@@ -53,7 +55,7 @@ public class SessionManager {
     * 利用Cookie，在客户端保存Session的id
     * @param session 当前的Session
  	* @param request 客户端的请求对象
- 	* @param response 服务器的反应对象
+ 	* @param response 服务器的响应对象
     * @author cn-wumo
     * @since 2021/4/16
     */
@@ -67,7 +69,7 @@ public class SessionManager {
     /**
     * 创建一个新的Session，塞入sessionMap并设置Session的过期时间
     * @param request 客户端的请求对象
- 	* @param response 服务器的反应对象
+ 	* @param response 服务器的响应对象
     * @return javax.servlet.http.HttpSession
     * @author cn-wumo
     * @since 2021/4/16

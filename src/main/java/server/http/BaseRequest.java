@@ -12,6 +12,11 @@ import java.security.Principal;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
+/**
+* 实现HttpServletRequest的傀儡类，无任何作用
+* @author cn-wumo
+* @since 2021/4/17
+*/
 @SuppressWarnings("all")
 public class BaseRequest implements HttpServletRequest {
     @Override

@@ -17,6 +17,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -54,18 +55,17 @@ public class PortCheck {
 
     @Test
     public void TimeConsumeHtml() throws InterruptedException {
-        ThreadPoolExecutor threadPool = new ThreadPoolExecutor(
-                20, 20, 60, TimeUnit.SECONDS,
-                new LinkedBlockingQueue<>(10));
-        TimeInterval timeInterval = DateUtil.timer();
-
-        for(int i = 0; i<3; i++){
-            threadPool.execute(() -> getContentString("/timeConsume.html"));
+        CountDownLatch countDownLatch=new CountDownLatch(3);
+        TimeInterval timeInterval= DateUtil.timer();
+        for (int i = 0; i <3; i++) {
+            new Thread(()->{
+                getContentString("/timeConsume.html");
+                countDownLatch.countDown();
+            },"Thread "+i).start();
         }
-        threadPool.shutdown();
-        threadPool.awaitTermination(1, TimeUnit.MILLISECONDS);
-
-        Assert.assertTrue(timeInterval.intervalMs() < 1000);
+        countDownLatch.await();
+        long duration=timeInterval.intervalMs();
+        Assert.assertTrue(duration<3000);
     }
 
     @Test
@@ -80,9 +80,9 @@ public class PortCheck {
         String uri = "/javaee/param";
         String url = StrUtil.format("http://{}:{}{}", ip,port,uri);
         Map<String,Object> params = new HashMap<>();
-        params.put("name","meepo");
+        params.put("name","java");
         String html = MiniBrowser.getContentString(url, params, true);
-        Assert.assertEquals(html,"get name:meepo");
+        Assert.assertEquals(html,"get name:java");
     }
 
     @Test
@@ -90,9 +90,9 @@ public class PortCheck {
         String uri = "/javaee/param";
         String url = StrUtil.format("http://{}:{}{}", ip,port,uri);
         Map<String,Object> params = new HashMap<>();
-        params.put("name","meepo");
+        params.put("name","java");
         String html = MiniBrowser.getContentString(url, params, false);
-        Assert.assertEquals(html,"post name:meepo");
+        Assert.assertEquals(html,"post name:java");
     }
 
     @Test
@@ -132,7 +132,7 @@ public class PortCheck {
 
     @Test
     public void Session() throws IOException {
-        String jsessionid = getContentString("/javaee/setSession");
+        String jsessionid = getContentString("/javaee/setSession?a=12&b=32");
         if(null!=jsessionid)
             jsessionid = jsessionid.trim();
         String url = StrUtil.format("http://{}:{}{}", ip,port,"/javaee/getSession");

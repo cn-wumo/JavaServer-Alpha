@@ -19,7 +19,7 @@ import java.util.List;
 public class ServerXMLUtil {
     
     /**
-    * 从Server.xml中读取服务器的Contexts配置，例如web服务器的工件上下文，web服务器的路径和是否自动重载
+    * 从Server.xml中读取服务器的Contexts配置，例如web服务器的容器，web服务器的路径和是否自动重载
     * @param host 主机地址
     * @return java.util.List<server.catalina.Context>
     * @author cn-wumo

@@ -6,6 +6,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Locale;
+/**
+* 实现HttpServletResponse的傀儡类，无任何作用
+* @author cn-wumo
+* @since 2021/4/17
+*/
 @SuppressWarnings("all")
 public class BaseResponse implements HttpServletResponse {
     @Override

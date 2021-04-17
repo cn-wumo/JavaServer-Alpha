@@ -14,7 +14,7 @@ import java.util.Optional;
 public class CommonClassLoader extends URLClassLoader {
 
     /**
-    * 将web程序的依赖包路径读入
+    * 将JavaServer-Alpha设置的依赖包导入
     * @author cn-wumo
     * @since 2021/4/15
     */
