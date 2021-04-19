@@ -22,7 +22,7 @@ public class WebXMLUtil {
     
     /**
     * 获取web.xml文件中的WelcomeFile，未找到则返回index.html
-    * @param context web服务器的容器
+    * @param context web服务器容器
     * @return java.lang.String
     * @author cn-wumo
     * @since 2021/4/16

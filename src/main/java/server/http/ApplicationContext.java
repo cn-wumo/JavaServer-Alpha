@@ -5,6 +5,11 @@ import server.catalina.Context;
 import java.io.File;
 import java.util.*;
 
+/**
+* web应用程序的全局上下文，保存application全局的属性
+* @author cn-wumo
+* @since 2021/4/18
+*/
 public class ApplicationContext extends BaseServletContext{
     private final Map<String, Object> attributesMap;
     private final Context context;

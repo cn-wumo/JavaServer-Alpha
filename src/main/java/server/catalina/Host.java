@@ -83,7 +83,7 @@ public class Host {
     }
 
     /**
-    * 重新加载Host虚拟主机下的容器
+    * 重新加载Host虚拟主机下的web应用程序容器
     * @param context web应用容器
     * @author cn-wumo
     * @since 2021/4/17

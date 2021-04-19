@@ -94,7 +94,7 @@ public class Request extends BaseRequest {
     }
 
     /**
-    * 根据uri和服务连接器获取容器
+    * 根据uri和服务连接器获取web应用程序容器
     * @param uri 客户端访问的uri地址
  	* @param connector  客户端选择的服务连接器
     * @return server.catalina.Context
@@ -104,16 +104,16 @@ public class Request extends BaseRequest {
     private static Context parseContext(String uri,Connector connector) {
         Engine engine = connector.getService().getEngine();
 
-        Context context = engine.getDefaultHost().getContext(uri); //通过uri寻找容器
-        if(null == context){   //通过uri未找到容器
+        Context context = engine.getDefaultHost().getContext(uri); //通过uri寻找web应用程序容器
+        if(null == context){   //通过uri未找到web应用程序容器
             String path = StrUtil.subBetween(uri, "/", "/");
             if (null == path)   //路径为空，访问根地址
                 path = "/";
             else
-                path = "/" + path;  //路径不为空，访问对应的容器地址
+                path = "/" + path;  //路径不为空，访问对应的web应用程序容器地址
 
             context = engine.getDefaultHost().getContext(path);
-            if (null == context)    //未找到容器地址，返回根地址
+            if (null == context)    //未找到web应用程序容器地址，返回根地址
                 context = engine.getDefaultHost().getContext("/");
         }
         return context;

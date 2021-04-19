@@ -24,10 +24,18 @@ import java.nio.charset.StandardCharsets;
 */
 public class HttpProcessor {
 
+    /**
+    * 执行http协议处理器
+    * @param socket 服务器和客户端之间的socket
+ 	* @param request 客户端的请求
+ 	* @param response 服务器的响应
+    * @author cn-wumo
+    * @since 2021/4/18
+    */
     public void execute(Socket socket, Request request, Response response){
         try{
             String uri = request.getUri();
-            System.out.println("uri:"+uri);
+            System.out.println(request.getLocalAddr()+" visit uri:"+uri);
             Context context = request.getContext();
             String servletClassName = context.getServletClassName(uri);
             this.prepareSession(request, response);
