@@ -35,26 +35,30 @@ public class HttpProcessor {
     public void execute(Socket socket, Request request, Response response){
         try{
             String uri = request.getUri();
-            System.out.println(request.getLocalAddr()+" visit uri:"+uri);
+            LogFactory.get().info(request.getLocalAddr()+" visit uri:"+uri);    //调试用，打印访客信息
             Context context = request.getContext();
-            String servletClassName = context.getServletClassName(uri);
             this.prepareSession(request, response);
+
+            String servletClassName = context.getServletClassName(uri); //根据web应用程序的web.xml配置，寻找url对应的servlet-name
             if(null!=servletClassName){
+                //在web应用程序中找到servlet-name，则访问servlet处理器
                 InvokerServlet.getInstance().service(request,response);
             }else {
+                //未在web应用程序中找到servlet-name，则访问缺省servlet处理器，例如html文件等静态资源
                 DefaultServlet.getInstance().service(request,response);
             }
-            if(Constant.CODE_200 == response.getStatus()){
-                handle200(socket, request, response);
-            }
-            if(Constant.CODE_404 == response.getStatus()){
-                handle404(socket, uri);
+
+            //根据response的状态，进入不同的流程
+            switch (response.getStatus()) {
+                case Constant.CODE_200 -> handle200(socket, request, response);
+                case Constant.CODE_404 -> handle404(socket, uri);
             }
         } catch (Exception e) {
             LogFactory.get().error(e);
             handle500(socket,e);
         }
     }
+
     private void handle200(Socket s, Request request, Response response)
             throws IOException {
         OutputStream os = s.getOutputStream();
@@ -113,11 +117,13 @@ public class HttpProcessor {
         responseText = Constant.response_head_404 + responseText;
         byte[] responseByte = responseText.getBytes(StandardCharsets.UTF_8);
         os.write(responseByte);
+        os.close();
     }
 
     private void handle500(Socket socket, Exception e) {
-        try {
-            OutputStream os = socket.getOutputStream();
+        try(
+                OutputStream os = socket.getOutputStream();
+                ) {
             StackTraceElement[] traceElements = e.getStackTrace();
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(e);

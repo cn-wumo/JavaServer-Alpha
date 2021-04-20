@@ -21,7 +21,7 @@ public class WebXMLUtil {
     private static final Map<String, String> mimeTypeMapping = WebXMLUtil.initMimeType();
     
     /**
-    * 获取web.xml文件中的WelcomeFile，未找到则返回index.html
+    * 获取web应用程序容器的web.xml文件中的WelcomeFile，未找到则返回index.html
     * @param context web服务器容器
     * @return java.lang.String
     * @author cn-wumo

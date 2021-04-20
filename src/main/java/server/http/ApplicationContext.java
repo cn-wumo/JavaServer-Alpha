@@ -11,7 +11,7 @@ import java.util.*;
 * @since 2021/4/18
 */
 public class ApplicationContext extends BaseServletContext{
-    private final Map<String, Object> attributesMap;
+    private final Map<String, Object> attributesMap;    //全局属性map
     private final Context context;
 
     public ApplicationContext(Context context) {

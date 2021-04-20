@@ -34,24 +34,24 @@ public class PortCheck {
         }
     }
     @Test
-    public void Anything(){
+    public void testAnything(){
     }
 
     @Test
-    public void Test() {
+    public void test() {
         String html = getContentString("/");
         Assert.assertEquals(html,"Hello JavaServer-Alpha@ROOT");
     }
 
     @Test
-    public void JPG() {
+    public void testJPG() {
         byte[] bytes = getContentBytes("/emoticon.jpg");
         int pngFileLength = 64429;
         Assert.assertEquals(pngFileLength, bytes.length);
     }
 
     @Test
-    public void TimeConsumeHtml() throws InterruptedException {
+    public void testTimeConsumeHtml() throws InterruptedException {
         CountDownLatch countDownLatch=new CountDownLatch(3);
         TimeInterval timeInterval= DateUtil.timer();
         for (int i = 0; i <3; i++) {
@@ -66,14 +66,14 @@ public class PortCheck {
     }
 
     @Test
-    public void Hello() {
+    public void testHello() {
         String html1 = getContentString("/javaee/hello");
         String html2 = getContentString("/javaee/hello");
         Assert.assertEquals(html1,html2);
     }
 
     @Test
-    public void GetParam() {
+    public void testGetParam() {
         String uri = "/javaee/param";
         String url = StrUtil.format("http://{}:{}{}", ip,port,uri);
         Map<String,Object> params = new HashMap<>();
@@ -83,7 +83,7 @@ public class PortCheck {
     }
 
     @Test
-    public void PostParam() {
+    public void testPostParam() {
         String uri = "/javaee/param";
         String url = StrUtil.format("http://{}:{}{}", ip,port,uri);
         Map<String,Object> params = new HashMap<>();
@@ -105,19 +105,19 @@ public class PortCheck {
     }
 
     @Test
-    public void JavaeeHello() {
+    public void testJavaeeHello() {
         String html = getContentString("/javaee/hello");
         Assert.assertEquals(html,"Hello JavaServer-Alpha from HelloServlet@javaee");
     }
 
     @Test
-    public void Header() {
+    public void testHeader() {
         String html = getContentString("/javaee/header");
         Assert.assertEquals(html,"mini browser");
     }
 
     @Test
-    public void Cookie() throws IOException {
+    public void testCookie() throws IOException {
         URL url = new URL(StrUtil.format("http://{}:{}{}", ip,port,"/javaee/getCookie"));
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestProperty("Cookie","name=java(cookie)");
@@ -128,7 +128,7 @@ public class PortCheck {
     }
 
     @Test
-    public void Session() throws IOException {
+    public void testSession() throws IOException {
         String jsessionid = getContentString("/javaee/setSession?a=12&b=32");
         if(null!=jsessionid)
             jsessionid = jsessionid.trim();
@@ -143,7 +143,7 @@ public class PortCheck {
     }
 
     @Test
-    public void Gzip() {
+    public void testGzip() {
         byte[] gzipContent = getContentBytes("/",true);
         byte[] unGzipContent = ZipUtil.unGzip(gzipContent);
         String html = new String(unGzipContent);
