@@ -6,15 +6,18 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.ZipUtil;
+import org.jsoup.internal.StringUtil;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -33,9 +36,6 @@ public class PortCheck {
             System.out.println("检测到JavaServer已经启动，开始进行单元测试");
         }
     }
-    @Test
-    public void testAnything(){
-    }
 
     @Test
     public void test() {
@@ -48,6 +48,8 @@ public class PortCheck {
         byte[] bytes = getContentBytes("/emoticon.jpg");
         int pngFileLength = 64429;
         Assert.assertEquals(pngFileLength, bytes.length);
+        bytes = getContentBytes("/index.html");
+        Assert.assertEquals(new String(bytes),"Hello JavaServer-Alpha@ROOT");
     }
 
     @Test

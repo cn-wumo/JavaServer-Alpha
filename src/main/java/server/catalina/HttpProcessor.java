@@ -4,11 +4,11 @@ import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.ZipUtil;
 import cn.hutool.log.LogFactory;
+import server.http.Request;
+import server.http.Response;
 import server.servlets.DefaultServlet;
 import server.servlets.InvokerServlet;
 import server.util.Constant;
-import server.http.Request;
-import server.http.Response;
 import server.util.SessionManager;
 
 import javax.servlet.http.HttpSession;
@@ -59,58 +59,47 @@ public class HttpProcessor {
         }
     }
 
-    private void handle200(Socket s, Request request, Response response)
+    /**
+    * 返回200响应报文
+    * @param socket 服务器和客户端之间的socket
+ 	* @param request 客户端的请求报文
+ 	* @param response 服务器的响应报文
+    * @author cn-wumo
+    * @since 2021/4/20
+    */
+    private void handle200(Socket socket, Request request, Response response)
             throws IOException {
-        OutputStream os = s.getOutputStream();
+        OutputStream os = socket.getOutputStream();
         String contentType = response.getContentType();
         byte[] body = response.getBody();
         String cookiesHeader = response.getCookiesHeader();
-        boolean gzip = isGzip(request, body, contentType);
-        String headText;
-        if (gzip)
-            headText = Constant.response_head_200_gzip;
-        else
-            headText = Constant.response_head_200;
-        headText = StrUtil.format(headText, contentType, cookiesHeader);
-        if (gzip)
+        boolean gzip = isGzip(request, body, contentType);  //是否采用gzip压缩
+
+        String headTextFormat;
+        if (gzip) {
+            headTextFormat = Constant.response_head_200_gzip;
             body = ZipUtil.gzip(body);
+        }else
+            headTextFormat = Constant.response_head_200;
+
+        String headText = StrUtil.format(headTextFormat, contentType, cookiesHeader);
         byte[] head = headText.getBytes();
         byte[] responseBytes = new byte[head.length + body.length];
-        ArrayUtil.copy(head, 0, responseBytes, 0, head.length);
-        ArrayUtil.copy(body, 0, responseBytes, head.length, body.length);
+        ArrayUtil.copy(head, 0, responseBytes, 0, head.length); //写入报文头
+        ArrayUtil.copy(body, 0, responseBytes, head.length, body.length);   //写入报文体
+
         os.write(responseBytes,0,responseBytes.length);
         os.flush();
         os.close();
     }
 
-    private boolean isGzip(Request request, byte[] body, String mimeType) {
-        String acceptEncodings=  request.getHeader("Accept-Encoding");
-        if(!StrUtil.containsAny(acceptEncodings, "gzip"))
-            return false;
-        Connector connector = request.getConnector();
-        if (mimeType.contains(";"))
-            mimeType = StrUtil.subBefore(mimeType, ";", false);
-        if (!"on".equals(connector.getCompression()))
-            return false;
-        if (body.length < connector.getCompressionMinSize())
-            return false;
-        String userAgents = connector.getNoCompressionUserAgents();
-        String[] eachUserAgents = userAgents.split(",");
-        for (String eachUserAgent : eachUserAgents) {
-            eachUserAgent = eachUserAgent.trim();
-            String userAgent = request.getHeader("User-Agent");
-            if (StrUtil.equals(userAgent, eachUserAgent))
-                return false;
-        }
-        String mimeTypes = connector.getCompressibleMimeType();
-        String[] eachMimeTypes = mimeTypes.split(",");
-        for (String eachMimeType : eachMimeTypes) {
-            if (mimeType.equals(eachMimeType))
-                return true;
-        }
-        return false;
-    }
-
+    /**
+    * 返回404响应报文
+    * @param socket 服务器和客户端之间的socket
+ 	* @param uri 客户端访问的uri
+    * @author cn-wumo
+    * @since 2021/4/20
+    */
     private void handle404(Socket socket, String uri) throws IOException {
         OutputStream os = socket.getOutputStream();
         String responseText = StrUtil.format(Constant.textFormat_404, uri, uri);
@@ -120,10 +109,17 @@ public class HttpProcessor {
         os.close();
     }
 
+    /**
+    * 返回500响应报文
+    * @param socket 服务器和客户端之间的socket
+ 	* @param e 服务器的错误类型
+    * @author cn-wumo
+    * @since 2021/4/20
+    */
     private void handle500(Socket socket, Exception e) {
         try(
-                OutputStream os = socket.getOutputStream();
-                ) {
+                OutputStream os = socket.getOutputStream()
+        ) {
             StackTraceElement[] traceElements = e.getStackTrace();
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(e);
@@ -136,11 +132,12 @@ public class HttpProcessor {
 
             String msg = e.getMessage();
 
-            if (null != msg && msg.length() > 20)
+            if (null != msg && msg.length() > 20)   //显示20行错误报告
                 msg = msg.substring(0, 19);
 
             String text = StrUtil.format(Constant.textFormat_500, msg, e.toString(), stringBuilder.toString());
             text = Constant.response_head_500 + text;
+            
             byte[] responseBytes = text.getBytes(StandardCharsets.UTF_8);
             os.write(responseBytes);
         } catch (IOException e1) {
@@ -148,6 +145,50 @@ public class HttpProcessor {
         }
     }
 
+    /**
+    * 判断是否采用gzip压缩
+    * @param request 客户端的请求报文
+ 	* @param body 响应报文的实体
+ 	* @param mimeType 访问文件的mime-type
+    * @return boolean
+    * @author cn-wumo
+    * @since 2021/4/20
+    */
+    private boolean isGzip(Request request, byte[] body, String mimeType) {
+        String acceptEncodings=  request.getHeader("Accept-Encoding");
+        if(!StrUtil.containsAny(acceptEncodings, "gzip"))
+            return false;
+        Connector connector = request.getConnector();
+        if (mimeType.contains(";"))
+            mimeType = StrUtil.subBefore(mimeType, ";", false);
+        if (!"on".equals(connector.getCompression()))   //服务连接器不启动压缩
+            return false;
+        if (body.length < connector.getCompressionMinSize())    //小于压缩的最短长度
+            return false;
+        String userAgents = connector.getNoCompressionUserAgents();
+        String[] eachUserAgents = userAgents.split(",");
+        for (String eachUserAgent : eachUserAgents) {   //判断客户端的浏览器是否在不压缩名单
+            eachUserAgent = eachUserAgent.trim();
+            String userAgent = request.getHeader("User-Agent");
+            if (StrUtil.equals(userAgent, eachUserAgent))
+                return false;
+        }
+        String mimeTypes = connector.getCompressibleMimeType();
+        String[] eachMimeTypes = mimeTypes.split(",");
+        for (String eachMimeType : eachMimeTypes) { //判断mime-type是否可压缩
+            if (mimeType.equals(eachMimeType))
+                return true;
+        }
+        return false;
+    }
+
+    /**
+    * 获取request对应的session
+    * @param request 客户端的请求报文
+ 	* @param response 服务器的响应报文
+    * @author cn-wumo
+    * @since 2021/4/21
+    */
     public void prepareSession(Request request, Response response) {
         String jsessionid = request.getJSessionIdFromCookie();
         HttpSession session = SessionManager.getSession(jsessionid, request, response);

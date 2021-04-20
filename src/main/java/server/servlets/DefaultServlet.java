@@ -1,7 +1,6 @@
 package server.servlets;
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
 import server.http.Request;
 import server.http.Response;

@@ -5,6 +5,12 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionContext;
 import java.util.*;
 
+/**
+* 标准的session，保存维持用户会话所需的属性
+* @author cn-wumo
+* @since 2021/4/21
+*/
+@SuppressWarnings("all")
 public class StandardSession implements HttpSession {
     private Map<String, Object> attributesMap;
 
@@ -14,6 +20,13 @@ public class StandardSession implements HttpSession {
     private ServletContext servletContext;
     private int maxInactiveInterval;
 
+    /**
+    * 根据session的id和全局上下文创建新的标准session
+    * @param jsessionid
+ 	* @param servletContext
+    * @author cn-wumo
+    * @since 2021/4/21
+    */
     public StandardSession(String jsessionid, ServletContext servletContext) {
         this.attributesMap = new HashMap<>();
         this.id = jsessionid;
