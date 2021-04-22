@@ -6,18 +6,15 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.ZipUtil;
-import org.jsoup.internal.StringUtil;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -150,6 +147,12 @@ public class PortCheck {
         byte[] unGzipContent = ZipUtil.unGzip(gzipContent);
         String html = new String(unGzipContent);
         Assert.assertEquals(html, "Hello JavaServer-Alpha@ROOT");
+    }
+
+    @Test
+    public void testJsp() {
+        String html = getContentString("/javaee/");
+        Assert.assertEquals(html, "hello jsp@javaweb");
     }
 
     private byte[] getContentBytes(String uri) {

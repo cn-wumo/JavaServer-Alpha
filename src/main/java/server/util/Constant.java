@@ -9,6 +9,8 @@ import java.io.File;
 * @since 2021/4/15
 */
 public class Constant {
+    public static final String workFolder = SystemUtil.get("user.dir") + File.separator + "work";
+
     public static final String response_head_200 =
             "HTTP/1.1 200 OK\r\n" +
             "Content-Type: {}{}" +

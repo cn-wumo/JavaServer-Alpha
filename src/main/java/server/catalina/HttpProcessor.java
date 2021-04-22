@@ -8,6 +8,7 @@ import server.http.Request;
 import server.http.Response;
 import server.servlets.DefaultServlet;
 import server.servlets.InvokerServlet;
+import server.servlets.JspServlet;
 import server.util.Constant;
 import server.util.SessionManager;
 
@@ -43,7 +44,10 @@ public class HttpProcessor {
             if(null!=servletClassName){
                 //在web应用程序中找到servlet-name，则访问servlet处理器
                 InvokerServlet.getInstance().service(request,response);
-            }else {
+            }else if(uri.endsWith(".jsp"))
+                //.jsp为拓展名的资源文件，访问JSP处理器
+                JspServlet.getInstance().service(request,response);
+            else {
                 //未在web应用程序中找到servlet-name，则访问缺省servlet处理器，例如html文件等静态资源
                 DefaultServlet.getInstance().service(request,response);
             }
