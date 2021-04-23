@@ -9,7 +9,21 @@ import java.io.File;
 * @since 2021/4/15
 */
 public class Constant {
-    public static final String workFolder = SystemUtil.get("user.dir") + File.separator + "work";
+    public static final int CODE_200 = 200;
+    public static final int CODE_302 = 302;
+    public static final int CODE_404 = 404;
+    public static final int CODE_500 = 500;
+
+
+
+    public static final String[] javaKeywords = {
+            "abstract", "assert", "boolean", "break", "byte", "case", "catch",
+            "char", "class", "const", "continue", "default", "do", "double", "else", "enum", "extends", "final",
+            "finally", "float", "for", "goto", "if", "implements", "import", "instanceof", "int", "interface", "long",
+            "native", "new", "package", "private", "protected", "public", "return", "short", "static", "strictfp",
+            "super", "switch", "synchronized", "this", "throw", "throws", "transient", "try", "void", "volatile",
+            "while"
+    };
 
     public static final String response_head_200 =
             "HTTP/1.1 200 OK\r\n" +
@@ -62,8 +76,5 @@ public class Constant {
     public static final File webXmlFile = new File(confFolder, "web.xml");
     public static final File contextXmlFile = new File(confFolder, "context.xml");
 
-    public static final int CODE_200 = 200;
-    public static final int CODE_302 = 302;
-    public static final int CODE_404 = 404;
-    public static final int CODE_500 = 500;
+    public static final File workFolder = new File(SystemUtil.get("user.dir") + File.separator + "work");
 }

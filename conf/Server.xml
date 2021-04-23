@@ -3,7 +3,7 @@
     <Service name="Catalina">
         <Connector port="8080"
                    compression="on"
-                   compressionMinSize="20"
+                   compressionMinSize="10"
                    noCompressionUserAgents=""
                    compressibleMimeType="text/html,text/xml,text/javascript,application/javascript,text/css,text/plain,text/json"/>
         <Connector port="8081"/>

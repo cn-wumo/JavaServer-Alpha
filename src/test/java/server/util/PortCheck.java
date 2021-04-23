@@ -37,7 +37,7 @@ public class PortCheck {
     @Test
     public void test() {
         String html = getContentString("/");
-        Assert.assertEquals(html,"Hello JavaServer-Alpha@ROOT");
+        Assert.assertEquals(html,"hello jsp@ROOT");
     }
 
     @Test
@@ -45,8 +45,8 @@ public class PortCheck {
         byte[] bytes = getContentBytes("/emoticon.jpg");
         int pngFileLength = 64429;
         Assert.assertEquals(pngFileLength, bytes.length);
-        bytes = getContentBytes("/index.html");
-        Assert.assertEquals(new String(bytes),"Hello JavaServer-Alpha@ROOT");
+        bytes = getContentBytes("/index.jsp");
+        Assert.assertEquals(new String(bytes),"hello jsp@ROOT");
     }
 
     @Test
@@ -146,13 +146,15 @@ public class PortCheck {
         byte[] gzipContent = getContentBytes("/",true);
         byte[] unGzipContent = ZipUtil.unGzip(gzipContent);
         String html = new String(unGzipContent);
-        Assert.assertEquals(html, "Hello JavaServer-Alpha@ROOT");
+        Assert.assertEquals(html, "hello jsp@ROOT");
     }
 
     @Test
     public void testJsp() {
         String html = getContentString("/javaee/");
         Assert.assertEquals(html, "hello jsp@javaweb");
+        html = getContentString("/");
+        Assert.assertEquals(html, "hello jsp@ROOT");
     }
 
     private byte[] getContentBytes(String uri) {

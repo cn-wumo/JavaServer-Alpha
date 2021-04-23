@@ -18,7 +18,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
-* 缺省JSP处理器，采用单例模式，处理JSP文件的servlet
+* JSP处理器，采用单例模式，处理JSP文件的servlet
 * @author cn-wumo
 * @since 2021/4/22
 */
@@ -28,12 +28,19 @@ public class JspServlet extends HttpServlet {
     public static synchronized JspServlet getInstance() {
         return instance;
     }
-
+    
     private JspServlet() {
     }
 
+    /**
+    * 根据请求报文的信息，完善响应报文的内容
+    * @param httpServletRequest 客户端的请求报文
+    * @param httpServletResponse 服务器的响应报文
+    * @author cn-wumo
+    * @since 2021/4/23
+    */
     public void service(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
-            throws IOException, ServletException {
+            throws IOException, ServletException, RuntimeException {
         try {
             Request request = (Request) httpServletRequest;
             Response response = (Response) httpServletResponse;
@@ -44,9 +51,8 @@ public class JspServlet extends HttpServlet {
                 uri = WebXMLUtil.getWelcomeFile(request.getContext());
 
             String fileName = StrUtil.removePrefix(uri, "/");
-            File file = FileUtil.file(request.getRealPath(fileName));
+            File jspFile = FileUtil.file(request.getRealPath(fileName));
 
-            File jspFile = file;
             if (jspFile.exists()) {
                 Context context = request.getContext();
                 String path = context.getPath();
@@ -57,15 +63,18 @@ public class JspServlet extends HttpServlet {
                     subFolder = StrUtil.subAfter(path, '/', false);
 
                 String servletClassPath = JspUtil.getServletClassPath(uri, subFolder);
+
                 File jspServletClassFile = new File(servletClassPath);
                 if (!jspServletClassFile.exists()) {
+                    //判断jspServlet是否存在
                     JspUtil.compileJsp(context, jspFile);
                 } else if (jspFile.lastModified() > jspServletClassFile.lastModified()) {
+                    //判断jspServlet的Class文件的更新时间是否晚于jspServlet的Java文件
                     JspUtil.compileJsp(context, jspFile);
                     JspClassLoader.invalidJspClassLoader(uri, context);
                 }
 
-                String extName = FileUtil.extName(file);
+                String extName = FileUtil.extName(jspFile);
                 String mimeType = WebXMLUtil.getMimeType(extName);
                 response.setContentType(mimeType);
 
@@ -73,14 +82,14 @@ public class JspServlet extends HttpServlet {
                 String jspServletClassName = JspUtil.getJspServletClassName(uri, subFolder);
                 Class<?> jspServletClass = jspClassLoader.loadClass(jspServletClassName);
 
-                HttpServlet servlet = context.getServlet(jspServletClass);
-                servlet.service(request,response);
+                HttpServlet servlet = context.getServlet(jspServletClass);  //获取jspServlet
+                servlet.service(request,response);  //调用servlet的service方法
 
                 response.setStatus(Constant.CODE_200);
             } else {
                 response.setStatus(Constant.CODE_404);
             }
-        } catch (Exception e) {
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
