@@ -85,7 +85,10 @@ public class JspServlet extends HttpServlet {
                 HttpServlet servlet = context.getServlet(jspServletClass);  //获取jspServlet
                 servlet.service(request,response);  //调用servlet的service方法
 
-                response.setStatus(Constant.CODE_200);
+                if(null!=response.getRedirectPath())
+                    response.setStatus(Constant.CODE_302);
+                else
+                    response.setStatus(Constant.CODE_200);
             } else {
                 response.setStatus(Constant.CODE_404);
             }

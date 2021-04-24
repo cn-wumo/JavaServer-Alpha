@@ -9,8 +9,10 @@ import org.jsoup.internal.StringUtil;
 import server.catalina.Connector;
 import server.catalina.Context;
 import server.catalina.Engine;
+import server.util.ApplicationRequestDispatcher;
 import server.util.MiniBrowser;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
@@ -38,6 +40,8 @@ public class Request extends BaseRequest {
     private Map<String, String> headerMap;
     private Cookie[] cookies;
     private HttpSession session;
+    private boolean forwarded;
+    private Map<String, Object> attributesMap;
 
     /**
     * 根据socket和connector构建新的请求类
@@ -60,6 +64,7 @@ public class Request extends BaseRequest {
         this.parameterMap = Request.parseParameters(requestString,method);
         this.headerMap = Request.parseHeaders(requestString);
         this.cookies = Request.parseCookies(headerMap);
+        this.attributesMap = new HashMap<>();
 
         if(!"/".equals(context.getPath())) {
             this.uri = StrUtil.removePrefix(uri, context.getPath());
@@ -225,6 +230,9 @@ public class Request extends BaseRequest {
     public String getUri() {
         return uri;
     }
+    public void setUri(String uri){
+        this.uri = uri;
+    }
 
     public Context getContext() {
         return context;
@@ -383,5 +391,37 @@ public class Request extends BaseRequest {
     @Override
     public HttpSession getSession() {
         return session;
+    }
+
+    public Socket getSocket() {
+        return socket;
+    }
+    @Override
+    public RequestDispatcher getRequestDispatcher(String uri) {
+        return new ApplicationRequestDispatcher(uri);
+    }
+    public boolean isForwarded() {
+        return forwarded;
+    }
+    public void setForwarded(boolean forwarded) {
+        this.forwarded = forwarded;
+    }
+
+    @Override
+    public void removeAttribute(String name) {
+        attributesMap.remove(name);
+    }
+    @Override
+    public void setAttribute(String name, Object value) {
+        attributesMap.put(name, value);
+    }
+    @Override
+    public Object getAttribute(String name) {
+        return attributesMap.get(name);
+    }
+    @Override
+    public Enumeration<String> getAttributeNames() {
+        Set<String> keys = attributesMap.keySet();
+        return Collections.enumeration(keys);
     }
 }

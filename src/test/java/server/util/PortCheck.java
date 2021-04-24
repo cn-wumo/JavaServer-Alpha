@@ -104,9 +104,17 @@ public class PortCheck {
     }
 
     @Test
-    public void testJavaeeHello() {
-        String html = getContentString("/javaee/hello");
-        Assert.assertEquals(html,"Hello JavaServer-Alpha from HelloServlet@javaee");
+    public void testClientJump(){
+        String http_servlet = getHttpString("/javaee/jump");
+        Assert.assertTrue(StrUtil.containsAny(http_servlet,"HTTP/1.1 302 Found"));
+        String http_jsp = getHttpString("/javaee/jump.jsp");
+        Assert.assertTrue(StrUtil.containsAny(http_jsp,"HTTP/1.1 302 Found"));
+    }
+
+    @Test
+    public void testServerJump(){
+        String http_servlet = getHttpString("/javaee/jump2");
+        Assert.assertTrue(StrUtil.containsAny(http_servlet,"Hello JavaServer-Alpha from HelloServlet@javaee, the author is cn_wumo"));
     }
 
     @Test

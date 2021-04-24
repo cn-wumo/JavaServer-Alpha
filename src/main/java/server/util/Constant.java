@@ -14,8 +14,6 @@ public class Constant {
     public static final int CODE_404 = 404;
     public static final int CODE_500 = 500;
 
-
-
     public static final String[] javaKeywords = {
             "abstract", "assert", "boolean", "break", "byte", "case", "catch",
             "char", "class", "const", "continue", "default", "do", "double", "else", "enum", "extends", "final",
@@ -33,6 +31,8 @@ public class Constant {
             "HTTP/1.1 200 OK\r\nContent-Type: {}{}\r\n" +
             "Content-Encoding:gzip" +
             "\r\n\r\n";
+    public static final String response_head_302 =
+            "HTTP/1.1 302 Found\r\nLocation: {}\r\n\r\n";
     public static final String response_head_404 =
             "HTTP/1.1 404 Not Found\r\n" +
             "Content-Type: text/html\r\n\r\n";

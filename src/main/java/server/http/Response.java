@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateUtil;
 
 import javax.servlet.http.Cookie;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
@@ -25,6 +26,7 @@ public class Response extends BaseResponse {
     private String contentType;
     private byte[] body;
     private int status;
+    private String redirectPath;
 
     /**
     * 构造新的Response，contentType默认是"text/html"
@@ -106,5 +108,13 @@ public class Response extends BaseResponse {
     @Override
     public void addCookie(Cookie cookie) {
         cookies.add(cookie);
+    }
+
+    public String getRedirectPath() {
+        return this.redirectPath;
+    }
+    @Override
+    public void sendRedirect(String redirect) throws IOException {
+        this.redirectPath = redirect;
     }
 }
