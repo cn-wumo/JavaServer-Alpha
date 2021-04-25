@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class ApplicationRequestDispatcher implements RequestDispatcher {
 
-    private String uri;
+    private final String uri;
     public ApplicationRequestDispatcher(String uri) {
         if(!uri.startsWith("/"))
             uri = "/" + uri;
