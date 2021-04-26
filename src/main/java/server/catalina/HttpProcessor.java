@@ -12,11 +12,14 @@ import server.servlets.JspServlet;
 import server.util.Constant;
 import server.util.SessionManager;
 
+import javax.servlet.Filter;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
 * Http协议处理器，Http业务的具体实现类
@@ -41,16 +44,21 @@ public class HttpProcessor {
             this.prepareSession(request, response);
 
             String servletClassName = context.getServletClassName(uri); //根据web应用程序的web.xml配置，寻找url对应的servlet-name
-            if(null!=servletClassName){
+            HttpServlet workingServlet;
+            if(null!=servletClassName)
                 //在web应用程序中找到servlet-name，则访问servlet处理器
-                InvokerServlet.getInstance().service(request,response);
-            }else if(uri.endsWith(".jsp"))
+                workingServlet = InvokerServlet.getInstance();
+            else if(uri.endsWith(".jsp"))
                 //.jsp为拓展名的资源文件，访问JSP处理器
-                JspServlet.getInstance().service(request,response);
-            else {
+                workingServlet = JspServlet.getInstance();
+            else
                 //未在web应用程序中找到servlet-name，则访问缺省servlet处理器，例如html文件等静态资源
-                DefaultServlet.getInstance().service(request,response);
-            }
+                workingServlet = DefaultServlet.getInstance();
+
+            List<Filter> filters = request.getContext().getMatchedFilters(request.getRequestURI());
+            ApplicationFilterChain filterChain = new ApplicationFilterChain(filters, workingServlet);
+            filterChain.doFilter(request, response);
+
             if(request.isForwarded())
                 return;
             //根据response的状态，进入不同的流程

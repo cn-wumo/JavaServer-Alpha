@@ -48,12 +48,12 @@ public class Context {
     private final Map<Class<?>, HttpServlet> servletPool;   //Servlet单例的对象池，只能从该池子中获取Servlet
     private ContextFileChangeWatcher contextFileChangeWatcher;  //文件改变监听器，监视web应用程序的class情况
 
-    private Map<String, List<String>> url_filterClassName;
-    private Map<String, List<String>> url_FilterNames;
-    private Map<String, String> filterName_className;
-    private Map<String, String> className_filterName;
-    private Map<String, Map<String, String>> filter_className_init_params;
-    private Map<String, Filter> filterPool;
+    private final Map<String, List<String>> url_filterClassName;  //url和filterClassName之间的映射
+    private final Map<String, List<String>> url_FilterNames;  //url和FilterNames之间的映射
+    private final Map<String, String> filterName_className;   //filterName和className之间的映射
+    private final Map<String, String> className_filterName;   //className和filterName之间的映射
+    private final Map<String, Map<String, String>> filter_className_init_params;  //filter_className和init_params之间的映射
+    private final Map<String, Filter> filterPool; //Filter的对象池
 
 
     /**
@@ -135,9 +135,10 @@ public class Context {
             this.parseServletInitParams(document);
             this.parseLoadOnStartup(document);
             this.handleLoadOnStartup();
-            parseFilterMapping(document);
-            parseFilterInitParams(document);
-            initFilter();
+            
+            this.parseFilterMapping(document);
+            this.parseFilterInitParams(document);
+            this.initFilter();
         }
     }
 
@@ -333,51 +334,50 @@ public class Context {
         host.reload(this);
     }
 
-    public void parseFilterMapping(Document d) {
-        // filter_url_name
-        Elements mappingurlElements = d.select("filter-mapping url-pattern");
-        for (Element mappingurlElement : mappingurlElements) {
-            String urlPattern = mappingurlElement.text();
-            String filterName = mappingurlElement.parent().select("filter-name").first().text();
+    /**
+    * 将文档中的Filter映射压入到web应用程序中
+    * @param document 待检查的文档
+    * @author cn-wumo
+    * @since 2021/4/26
+    */
+    public void parseFilterMapping(Document document) {
+        // url和filter_name之间的映射
+        Elements mappingElements = document.select("filter-mapping");
+        for (Element mappingElement : mappingElements) {
+            String urlPattern = mappingElement.select("url-patter").first().text();
+            String filterName = mappingElement.select("filter-name").first().text();
 
-            List<String> filterNames= url_FilterNames.get(urlPattern);
-            if(null==filterNames) {
-                filterNames = new ArrayList<>();
-                url_FilterNames.put(urlPattern, filterNames);
-            }
+            List<String> filterNames = url_FilterNames.computeIfAbsent(urlPattern, k -> new ArrayList<>());
             filterNames.add(filterName);
         }
-        // class_name_filter_name
-        Elements filterNameElements = d.select("filter filter-name");
-        for (Element filterNameElement : filterNameElements) {
-            String filterName = filterNameElement.text();
-            String filterClass = filterNameElement.parent().select("filter-class").first().text();
+        // class_name和filter_name之间的映射
+        Elements filterElements = document.select("filter");
+        for (Element filterNameElement : filterElements) {
+            String filterName = filterNameElement.select("filter-name").first().text();
+            String filterClass = filterNameElement.select("filter-class").first().text();
             filterName_className.put(filterName, filterClass);
             className_filterName.put(filterClass, filterName);
         }
-        // url_filterClassName
-
+        // url和filterClassName之间的映射
         Set<String> urls = url_FilterNames.keySet();
         for (String url : urls) {
-            List<String> filterNames = url_FilterNames.get(url);
-            if(null == filterNames) {
-                filterNames = new ArrayList<>();
-                url_FilterNames.put(url, filterNames);
-            }
+            List<String> filterNames = url_FilterNames.computeIfAbsent(url, k -> new ArrayList<>());
             for (String filterName : filterNames) {
                 String filterClassName = filterName_className.get(filterName);
-                List<String> filterClassNames = url_filterClassName.get(url);
-                if(null==filterClassNames) {
-                    filterClassNames = new ArrayList<>();
-                    url_filterClassName.put(url, filterClassNames);
-                }
+                List<String> filterClassNames = url_filterClassName.computeIfAbsent(url, k -> new ArrayList<>());
                 filterClassNames.add(filterClassName);
             }
         }
     }
 
-    private void parseFilterInitParams(Document d) {
-        Elements filterClassNameElements = d.select("filter-class");
+    /**
+    * 将文档中的filter-class和init-param映射压入到web应用程序中
+    * @param document 待检查的文档
+    * @author cn-wumo
+    * @since 2021/4/26
+    */
+    private void parseFilterInitParams(Document document) {
+        Elements filterClassNameElements = document.select("filter-class");
         for (Element filterClassNameElement : filterClassNameElements) {
             String filterClassName = filterClassNameElement.text();
 
@@ -385,20 +385,21 @@ public class Context {
             if (initElements.isEmpty())
                 continue;
 
-
             Map<String, String> initParams = new HashMap<>();
-
             for (Element element : initElements) {
-                String name = element.select("param-name").get(0).text();
-                String value = element.select("param-value").get(0).text();
+                String name = element.select("param-name").first().text();
+                String value = element.select("param-value").first().text();
                 initParams.put(name, value);
             }
-
             filter_className_init_params.put(filterClassName, initParams);
-
         }
     }
 
+    /**
+    * 初始化web应用程序的filter，将其压入单例的filter对象池中
+    * @author cn-wumo
+    * @since 2021/4/26
+    */
     private void initFilter() {
         Set<String> classNames = className_filterName.keySet();
         for (String className : classNames) {
@@ -407,7 +408,7 @@ public class Context {
                 Map<String,String> initParameters = filter_className_init_params.get(className);
                 String filterName = className_filterName.get(className);
                 FilterConfig filterConfig = new StandardFilterConfig(servletContext, filterName, initParameters);
-                Filter filter = filterPool.get(clazz);
+                Filter filter = filterPool.get(clazz.toString());
                 if(null==filter) {
                     filter = (Filter) ReflectUtil.newInstance(clazz);
                     filter.init(filterConfig);
@@ -417,6 +418,62 @@ public class Context {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    /**
+    * Context的匹配器，根据web.xml的拦截映射匹配待检查的uri
+    * @param uri 待匹配的uri
+    * @return java.util.List<javax.servlet.Filter>
+    * @author cn-wumo
+    * @since 2021/4/26
+    */
+    public List<Filter> getMatchedFilters(String uri) {
+        List<Filter> filters = new ArrayList<>();
+        Set<String> patterns = url_filterClassName.keySet();
+
+        Set<String> matchedPatterns = new HashSet<>();
+        for (String pattern : patterns) {
+            if(match(pattern,uri)) {
+                matchedPatterns.add(pattern);
+            }
+        }
+
+        Set<String> matchedFilterClassNames = new HashSet<>();
+        for (String pattern : matchedPatterns) {
+            List<String> filterClassName = url_filterClassName.get(pattern);
+            matchedFilterClassNames.addAll(filterClassName);
+        }
+
+        for (String filterClassName : matchedFilterClassNames) {
+            Filter filter = filterPool.get(filterClassName);
+            filters.add(filter);
+        }
+        return filters;
+    }
+
+    /**
+    * Filter的匹配器
+    * @param pattern 匹配参数
+ 	* @param uri 待匹配的uri
+    * @return boolean
+    * @author cn-wumo
+    * @since 2021/4/26
+    */
+    private boolean match(String pattern, String uri) {
+        // 完全匹配
+        if(StrUtil.equals(pattern, uri))
+            return true;
+        // /* 模式
+        if(StrUtil.equals(pattern, "/*"))
+            return true;
+        // 后缀名 /*.jsp
+        if(StrUtil.startWith(pattern, "/*.")) {
+            String patternExtName = StrUtil.subAfter(pattern, '.', false);
+            String uriExtName = StrUtil.subAfter(uri, '.', false);
+            return StrUtil.equals(patternExtName, uriExtName);
+        }
+        // 其他模式暂且省略
+        return false;
     }
 
     public String getServletClassName(String uri) {
