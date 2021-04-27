@@ -165,6 +165,12 @@ public class PortCheck {
         Assert.assertEquals(html, "hello jsp@ROOT");
     }
 
+    @Test
+    public void testJavaeeHello() {
+        String html = getContentString("/javaee0/hello");
+        System.out.println(html);
+    }
+
     private byte[] getContentBytes(String uri) {
         return getContentBytes(uri,false);
     }

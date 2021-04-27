@@ -10,7 +10,6 @@
         <Connector port="8082"/>
         <Engine defaultHost="localhost">
             <Host name = "localhost">
-                <Context path="/b" docBase="webapps/b" />
                 <Context path="/javaee" docBase="H:\Users\49277\Documents\GitHub\javaee\src\main\webapp" reloadable = "true" />
             </Host>
         </Engine>

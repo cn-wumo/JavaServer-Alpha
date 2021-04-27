@@ -1,8 +1,12 @@
 package server.catalina;
 
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.RuntimeUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.LogFactory;
 import server.util.Constant;
 import server.util.ServerXMLUtil;
+import server.watcher.WarFileWatcher;
 
 import java.io.File;
 import java.util.HashMap;
@@ -33,7 +37,8 @@ public class Host {
 
         this.contextMap = Host.scanContextsInServerXML(this);
         Host.scanContextsOnWebAppsFolder(this, contextMap);
-
+        scanWarOnWebAppsFolder();
+        new WarFileWatcher(this).start();
     }
 
     /**
@@ -98,6 +103,74 @@ public class Host {
         Context newContext = new Context(path, docBase, this, reloadable);
         contextMap.put(newContext.getPath(), newContext);
         LogFactory.get().info("重新加载 [{}] 已完成", context.getPath());
+    }
+
+    /**
+    * 扫描webapps目录，处理所有的war文件
+    * @author cn-wumo
+    * @since 2021/4/27
+    */
+    private void scanWarOnWebAppsFolder() {
+        File folder = FileUtil.file(Constant.webappsFolder);
+        File[] files = Optional.ofNullable(folder.listFiles()).orElse(new File[]{});
+        for (File file : files) {
+            if(!file.getName().toLowerCase().endsWith(".war"))
+                continue;
+            this.loadWar(file);
+        }
+    }
+
+    /**
+    * 把war文件解压为目录，并把文件夹加载为 Context
+    * @param warFile 待解压的war文件
+    * @author cn-wumo
+    * @since 2021/4/27
+    */
+    public void loadWar(File warFile) {
+        String fileName =warFile.getName();
+        String folderName = StrUtil.subBefore(fileName,".",true);
+        //检查是否已经有对应的Context
+        Context context= getContext("/"+folderName);
+        if(null!=context)
+            return;
+        //检查是否已经有对应的文件夹
+        File folder = new File(Constant.webappsFolder,folderName);
+        if(folder.exists())
+            return;
+        //移动war文件，因为jar 命令只支持解压到当前目录下
+        File tempWarFile = FileUtil.file(Constant.webappsFolder, folderName, fileName);
+        File contextFolder = tempWarFile.getParentFile();
+        contextFolder.mkdir();
+        FileUtil.copyFile(warFile, tempWarFile);
+        //解压
+        String command = "jar xvf " + fileName;
+        Process p = RuntimeUtil.exec(null, contextFolder, command);
+        try {
+            p.waitFor();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //解压之后删除临时war
+        tempWarFile.delete();
+        //创建新的Context
+        this.load(contextFolder);
+    }
+
+    /**
+    * 将文件夹加载为Context
+    * @param folder 待加载的文件夹
+    * @author cn-wumo
+    * @since 2021/4/27
+    */
+    public void load(File folder) {
+        String path = folder.getName();
+        if ("ROOT".equals(path))
+            path = "/";
+        else
+            path = "/" + path;
+        String docBase = folder.getAbsolutePath();
+        Context context = new Context(path, docBase, this, false);
+        contextMap.put(context.getPath(), context);
     }
 
     public String getName() {

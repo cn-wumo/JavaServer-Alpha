@@ -1,39 +1,35 @@
 package server.watcher;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.watch.WatchMonitor;
 import cn.hutool.core.io.watch.WatchUtil;
 import cn.hutool.core.io.watch.Watcher;
-import cn.hutool.log.LogFactory;
-import server.catalina.Context;
+import server.catalina.Host;
+import server.util.Constant;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.WatchEvent;
 
 /**
-* 监控web应用程序的文件变化
+* 监控webapps目录下的war文件变化
 * @author cn-wumo
 * @since 2021/4/27
 */
-public class ContextFileChangeWatcher {
+public class WarFileWatcher {
     private final WatchMonitor monitor;
-    private boolean stop = false;
-
-    public ContextFileChangeWatcher(Context context) {
-        this.monitor = WatchUtil.createAll(context.getDocBase(), Integer.MAX_VALUE, new Watcher() {
+    public WarFileWatcher(Host host) {
+        this.monitor = WatchUtil.createAll(Constant.webappsFolder, 1, new Watcher() {
             private void dealWith(WatchEvent<?> event) {
-                synchronized (ContextFileChangeWatcher.class) {
+                synchronized (WarFileWatcher.class) {
                     String fileName = event.context().toString();
-                    if (stop)
-                        return;
-                    if (fileName.endsWith(".jar") || fileName.endsWith(".class") || fileName.endsWith(".xml")) {
-                        stop = true;
-                        LogFactory.get().info(ContextFileChangeWatcher.this + " 检测到了Web应用下的重要文件变化 {} ", fileName);
-                        context.reload();
+                    if(fileName.toLowerCase().endsWith(".war")  && ENTRY_CREATE.equals(event.kind())) {
+                        File warFile = FileUtil.file(Constant.webappsFolder, fileName);
+                        host.loadWar(warFile);
                     }
-
                 }
             }
-
             @Override
             public void onCreate(WatchEvent<?> event, Path currentPath) {
                 dealWith(event);
@@ -44,21 +40,16 @@ public class ContextFileChangeWatcher {
                 dealWith(event);
 
             }
-
             @Override
             public void onDelete(WatchEvent<?> event, Path currentPath) {
                 dealWith(event);
-
             }
-
             @Override
             public void onOverflow(WatchEvent<?> event, Path currentPath) {
                 dealWith(event);
             }
 
         });
-
-        this.monitor.setDaemon(true);
     }
 
     public void start() {
@@ -66,6 +57,7 @@ public class ContextFileChangeWatcher {
     }
 
     public void stop() {
-        monitor.close();
+        monitor.interrupt();
     }
+
 }

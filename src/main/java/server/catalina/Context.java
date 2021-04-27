@@ -3,6 +3,7 @@ package server.catalina;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.IORuntimeException;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.LogFactory;
@@ -55,6 +56,8 @@ public class Context {
     private final Map<String, Map<String, String>> filter_className_init_params;  //filter_className和init_params之间的映射
     private final Map<String, Filter> filterPool; //Filter的对象池
 
+    private List<ServletContextListener> listeners; //web应用程序的监听器
+
 
     /**
     * 创建新的web应用程序容器
@@ -90,6 +93,8 @@ public class Context {
         this.servletContext = new ApplicationContext(this);
         this.loadOnStartupServletClassNames = new ArrayList<>();
 
+        this.listeners = new ArrayList<>();
+
         ClassLoader commonClassLoader = Thread.currentThread().getContextClassLoader();
         this.webappClassLoader = new WebappClassLoader(docBase, commonClassLoader);
 
@@ -104,6 +109,7 @@ public class Context {
     * @since 2021/4/18
     */
     private void deploy() {
+        this.loadListeners();
         this.init();
         if(reloadable){
             this.contextFileChangeWatcher = new ContextFileChangeWatcher(this);
@@ -119,6 +125,7 @@ public class Context {
     * @since 2021/4/18
     */
     private void init() {
+        this.fireEvent("init");
         if (!contextWebXmlFile.exists()) {
             LogFactory.get().error(contextWebXmlFile.getPath() + "不存在");
         }else{
@@ -311,6 +318,7 @@ public class Context {
         this.webappClassLoader.stop();  //摧毁类加载器
         this.contextFileChangeWatcher.stop();   //摧毁文件改变监听器
         this.destroyServlets(); //摧毁servlet类
+        this.fireEvent("destroy");
     }
 
     /**
@@ -344,7 +352,7 @@ public class Context {
         // url和filter_name之间的映射
         Elements mappingElements = document.select("filter-mapping");
         for (Element mappingElement : mappingElements) {
-            String urlPattern = mappingElement.select("url-patter").first().text();
+            String urlPattern = mappingElement.select("url-pattern").first().text();
             String filterName = mappingElement.select("filter-name").first().text();
 
             List<String> filterNames = url_FilterNames.computeIfAbsent(urlPattern, k -> new ArrayList<>());
@@ -404,7 +412,7 @@ public class Context {
         Set<String> classNames = className_filterName.keySet();
         for (String className : classNames) {
             try {
-                Class<?> clazz =  this.getWebappClassLoader().loadClass(className);
+                Class<?> clazz =  webappClassLoader.loadClass(className);
                 Map<String,String> initParameters = filter_className_init_params.get(className);
                 String filterName = className_filterName.get(className);
                 FilterConfig filterConfig = new StandardFilterConfig(servletContext, filterName, initParameters);
@@ -476,6 +484,49 @@ public class Context {
         return false;
     }
 
+    /**
+    * 将web.xml中的Listener映射压入到web应用程序中
+    * @author cn-wumo
+    * @since 2021/4/27
+    */
+    private void loadListeners()  {
+        try {
+            if(!contextWebXmlFile.exists())
+                return;
+            String xml = FileUtil.readUtf8String(contextWebXmlFile);
+            Document d = Jsoup.parse(xml);
+
+            Elements es = d.select("listener listener-class");
+            for (Element e : es) {
+                String listenerClassName = e.text();
+
+                Class<?> clazz = webappClassLoader.loadClass(listenerClassName);
+                ServletContextListener listener = (ServletContextListener) clazz.getDeclaredConstructor().newInstance();
+                addListener(listener);
+            }
+        } catch (IORuntimeException | ClassNotFoundException | InstantiationException |
+                IllegalAccessException | NoSuchMethodException | SecurityException |
+                InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+    * 触发监听器事件
+    * @param type 事件类型
+    * @author cn-wumo
+    * @since 2021/4/27
+    */
+    private void fireEvent(String type) {
+        ServletContextEvent event = new ServletContextEvent(servletContext);
+        for (ServletContextListener servletContextListener : listeners) {
+            if("init".equals(type))
+                servletContextListener.contextInitialized(event);
+            if("destroy".equals(type))
+                servletContextListener.contextDestroyed(event);
+        }
+    }
+
     public String getServletClassName(String uri) {
         return url_servletClassName.get(uri);
     }
@@ -510,5 +561,9 @@ public class Context {
 
     public ServletContext getServletContext() {
         return servletContext;
+    }
+
+    public void addListener(ServletContextListener listener){
+        listeners.add(listener);
     }
 }
